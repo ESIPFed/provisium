@@ -10,19 +10,17 @@ services:
       - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /dataVolumes/traefik/traefik.toml:/traefik.toml
-      - /dataVolumes/traefik/acme:/acme
-      - /dataVolumes/traefik/logs:/logs
+      # - /dataVolumes/traefik/traefik.toml:/traefik.toml  # do these later....
+      # - /dataVolumes/traefik/acme:/acme
+      # - /dataVolumes/traefik/logs:/logs
     networks:
       - traefik_default
 
   provisiumwebui:
-    image: earthcube/p418webui:latest
+    image: esiplab/provisium:0.1
     labels:
       - "traefik.backend=p418webui"
       - "traefik.frontend.rule=Host:provisium.io"
-    volumes:
-      - /dataVolumes/indexes:/indexes
     networks:
       - traefik_default
 
