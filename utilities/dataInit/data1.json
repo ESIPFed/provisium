@@ -17,7 +17,7 @@
    "propertyID": "UUID",
    "value":  "bcd15975-680c-47db-a062-ac0bb6e66816"
    },
-  "name": "208_1262A_JanusThermalConductivity_VyaMsepM.csv",
+  "name": "data1.csv",
   "publisher": {
     "@type": "Organization",
     "description": "This is a mock dataset published by ESIP labs for testing provance work.",

@@ -7,6 +7,7 @@ FROM scratch
 # Add in the static elements (could also mount these from local filesystem)
 ADD webapp /
 ADD ./static /static
+ADD ./kvStores /kvStores
 ADD ./templates /templates
 ADD ./dataResources /dataResources
 

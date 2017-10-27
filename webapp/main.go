@@ -51,6 +51,11 @@ func main() {
 	parking.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static"))))
 	http.Handle("/", &MyServer{parking})
 
+	// Static handler
+	static := mux.NewRouter()
+	static.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	http.Handle("/static/", &MyServer{static})
+
 	// Need a good 404 handler
 
 	// Start the server...
