@@ -8,6 +8,7 @@ import (
 	kv "lab.esipfed.org/provisium/webapp/kv"
 )
 
+// CatalogListing displays the catalog of files....
 func CatalogListing(w http.ResponseWriter, r *http.Request) {
 
 	// get an array of file IDs

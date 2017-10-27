@@ -27,9 +27,11 @@ func RenderLP(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(r.URL.Path[5:])
 	fmt.Println(r.URL.Path[1:])
-	// Note the HACK in the next line..  this is just an ALPHA..  (even this this sucks)
-	linkProv := fmt.Sprintf("<http://%s/id/%s/provenance>; rel=\"http://www.w3.org/ns/prov#has_provenance\"", r.Host, r.URL.Path[5:]) // use r.Host so we don't hardcode in
-	linkPB := fmt.Sprintf("<http://%s/rdf/%s/pingback>; rel=\"http://www.w3.org/ns/prov#pingbck\"", r.Host, r.URL.Path[5:])
+	// Note the HACK in the next line..  this is just an ALPHA..  (even so this sucks)
+	// TODO..   think about issues of 303 here with /id/ and /doc/ since that could becomine an issue...
+	// TODO..   it's hard to expect community clients to read and address 303?
+	linkProv := fmt.Sprintf("<http://%s/doc/%s/provenance>; rel=\"http://www.w3.org/ns/prov#has_provenance\"", r.Host, r.URL.Path[5:]) // use r.Host so we don't hardcode in
+	linkPB := fmt.Sprintf("<http://%s/doc/%s/pingback>; rel=\"http://www.w3.org/ns/prov#pingbck\"", r.Host, r.URL.Path[5:])
 	w.Header().Add("Link", linkProv)
 	w.Header().Add("Link", linkPB)
 	// w.Header().Set("Content-type", "text/plain")
@@ -50,9 +52,8 @@ func RenderLP(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// RenderProv shows the prov of a resource
-// right now it just hist getProvRecord which returns a generic same for all
-// record (since I have no prov data stood up now beyond testing stuff)
+// RenderProv shows the prov of a resource, it's just a dummy function now.....
+// TODO  need to have this actually get some PROV  :)
 func RenderProv(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(getProvRecord()))
 }
@@ -69,6 +70,7 @@ func ProvPingback(w http.ResponseWriter, r *http.Request) {
 	// TODO
 	// 1) validate this this  (400 if not)
 	// 2) store this this to KV store
+	// 3) Rolling to the master triple store..
 	w.WriteHeader(http.StatusNoContent)
 }
 

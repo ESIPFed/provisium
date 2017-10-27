@@ -19,13 +19,18 @@ the visualization service can easily be integrated inside of dataset landing
 and other pages.
 
 
-#### Notes
 
-Currently there is webapp and datastore.  Datastore will be a RDF triple server
-like blazegraph or the like.  Need to resolve if I want to communicate via a
-3rd package that could then expose those channels externally.  First thought is
-a gRPC tool to all webapp to SPARQL update via a secure channel.  Given the
-simplicity of this design, doesn't seem much need though.  So I will need to
-resolve some method to update (SPARQL UPDATE I guess) the triple store.  Be
-sure to use data volumes or something to persist the updates. 
+#### Notes
+Initial testing so far results in behavior where the response is something like
+
+```
+Fils:dataInit dfils$ curl -s -D - http://127.0.0.1:9900/doc/dataset/bcd15975-680c-47db-a062-ac0bb6e66816 -o /dev/null
+HTTP/1.1 200 OK
+Link: <http://127.0.0.1:9900/doc/dataset/bcd15975-680c-47db-a062-ac0bb6e66816/provenance>; rel="http://www.w3.org/ns/prov#has_provenance"
+Link: <http://127.0.0.1:9900/doc/dataset/bcd15975-680c-47db-a062-ac0bb6e66816/pingback>; rel="http://www.w3.org/ns/prov#pingbck"
+Date: Fri, 27 Oct 2017 17:58:49 GMT
+Content-Type: text/html; charset=utf-8
+Transfer-Encoding: chunked
+```
+
 
