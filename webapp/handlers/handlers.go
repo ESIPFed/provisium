@@ -1,4 +1,4 @@
-package handers
+package handlers
 
 import (
 	"bufio"
@@ -7,26 +7,53 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"text/template"
 
+	"github.com/gorilla/mux"
 	"github.com/knakk/rdf"
+	kv "lab.esipfed.org/provisium/webapp/kv"
 )
 
-// RenderWithProvHeader displays the RDF resource and adds a prov pingback entry
-func RenderWithProvHeader(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path[5:])                                                                                                       // Note the HACK in the next line..  this is just an ALPHA..  (even this this sucks)
+// RenderLP displays the RDF resource and adds a prov pingback entry
+func RenderLP(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	ID := vars["ID"]
+
+	// get metadata for this document
+	mock, err := kv.GetResMetaData(ID)
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Println(r.URL.Path[5:])
+	fmt.Println(r.URL.Path[1:])
+	// Note the HACK in the next line..  this is just an ALPHA..  (even this this sucks)
 	linkProv := fmt.Sprintf("<http://%s/id/%s/provenance>; rel=\"http://www.w3.org/ns/prov#has_provenance\"", r.Host, r.URL.Path[5:]) // use r.Host so we don't hardcode in
 	linkPB := fmt.Sprintf("<http://%s/rdf/%s/pingback>; rel=\"http://www.w3.org/ns/prov#pingbck\"", r.Host, r.URL.Path[5:])
 	w.Header().Add("Link", linkProv)
 	w.Header().Add("Link", linkPB)
-	w.Header().Set("Content-type", "text/plain")
-	fmt.Println(r.URL.Path[1:])
-	http.ServeFile(w, r, fmt.Sprintf("./static/%s", r.URL.Path[1:]))
+	// w.Header().Set("Content-type", "text/plain")
+
+	// Get template and display landing page meshed with metadata
+
+	// http.ServeFile(w, r, fmt.Sprintf("./static/%s", r.URL.Path[1:]))
+
+	ht, err := template.New("Landing page template").ParseFiles("templates/landingPage.html") //open and parse a template text file
+	if err != nil {
+		log.Printf("template parse failed: %s", err)
+	}
+
+	err = ht.ExecuteTemplate(w, "T", mock) //substitute fields in the template 't', with values from 'user' and write it out to 'w' which implements io.Writer
+	if err != nil {
+		log.Printf("htemplate execution failed: %s", err)
+	}
+
 }
 
-// RenderWithProv shows the prov of a resource
+// RenderProv shows the prov of a resource
 // right now it just hist getProvRecord which returns a generic same for all
 // record (since I have no prov data stood up now beyond testing stuff)
-func RenderWithProv(w http.ResponseWriter, r *http.Request) {
+func RenderProv(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(getProvRecord()))
 }
 
@@ -39,12 +66,10 @@ func ProvPingback(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Prov for %s\n", r.URL.Path[1:])
 	fmt.Println(string(body))
-	// do something with the POST data
-	// likely convert to triples and write to some end point...
-
+	// TODO
+	// 1) validate this this  (400 if not)
+	// 2) store this this to KV store
 	w.WriteHeader(http.StatusNoContent)
-
-	// w.Write([]byte("Thanks for your contribution"))  //  we are 204..  no need for body content
 }
 
 // getProvRecord an un-exported function to generate MOCK prov data for testing

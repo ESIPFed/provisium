@@ -26,10 +26,6 @@
         }
       </style>
     
-    <script type="application/ld+json"> 
-        {{.}}
-    </script>
-
     </head>
     
     <body>
@@ -65,20 +61,21 @@
           </div>
     
           <div class="mdl-grid">
+
+            {{ range $item := . }}
+            <!-- card -->
             <div class="mdl-cell mdl-cell--6-col">
-    
               <div class="demo-card-wide mdl-card mdl-shadow--2dp">
                 <div class="mdl-card__title">
                   <h2 class="mdl-card__title-text">Welcome</h2>
                 </div>
                 <div class="mdl-card__supporting-text">
-
-                    parse the jsonld here..
-
+                    Put dataset info here for name: {{.}}
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-                    More to come </a>
+                  <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+                  href=/id/dataset/{{.}}>
+                    Dataset landing page </a>
                 </div>
                 <div class="mdl-card__menu">
                   <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
@@ -87,12 +84,10 @@
                 </div>
               </div>
             </div>
-    
+            {{end}}
     
     
           </div>
-    
-    
         </main>
     
         <footer class="mdl-mini-footer">

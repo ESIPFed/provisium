@@ -1,14 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	dx "lab.esipfed.org/provisium/webapp/dx"
 	handlers "lab.esipfed.org/provisium/webapp/handlers"
-	"opencoredata.org/ocdWeb/dx"
 )
 
 // MyServer struct for mux router
@@ -16,39 +14,44 @@ type MyServer struct {
 	r *mux.Router
 }
 
-func rootHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	w.WriteHeader(http.StatusOK)
-	data, err := ioutil.ReadFile("./static/index.html")
-	if err != nil {
-		panic(err)
-	}
-	w.Header().Set("Content-Length", fmt.Sprint(len(data)))
-	fmt.Fprint(w, string(data))
-}
+// func rootHandler(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "text/html")
+// 	w.WriteHeader(http.StatusOK)
+// 	data, err := ioutil.ReadFile("./static/index.html")
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	w.Header().Set("Content-Length", fmt.Sprint(len(data)))
+// 	fmt.Fprint(w, string(data))
+// }
 
 func main() {
-	// root
+	// Recall /id is going to be our dx..   all items that come in with that will be looked up and 303'd
+	// Example URL:  http://opencoredata.org/id/dataset/c2d80e2a-cc30-430c-b0bd-cee9092688e3
+	dxroute := mux.NewRouter()
+	dxroute.HandleFunc("/id/dataset/{ID}", dx.Redirection)
+	dxroute.HandleFunc("/id/dataset/{ID}/provenance", dx.Redirection) // PROV: prov redirection
+	dxroute.HandleFunc("/id/dataset/{ID}/pingback", dx.Redirection)   // PROV: pingback for this resource  (would prefer a master /prov or server)
+	http.Handle("/id/", dxroute)
+
+	// Some early Prov Pingback work here...
+	dataset := mux.NewRouter()
+	dataset.HandleFunc("/doc/dataset/{ID}", handlers.RenderLP)              // PROV: test cast with Void..  would need to generalize
+	dataset.HandleFunc("/doc/dataset/{ID}/provenance", handlers.RenderProv) // PROV: test cast with Void..  would need to generalize
+	dataset.HandleFunc("/doc/dataset/{ID}/pingback", handlers.ProvPingback) // PROV: pingback for this resource  (would prefer a master /prov or server)
+	http.Handle("/doc/", dataset)
+
+	// Catalog listing
+	catalog := mux.NewRouter()
+	catalog.HandleFunc("/catalog/listing", handlers.CatalogListing) // PROV: test cast with Void..  would need to generalize
+	http.Handle("/catalog/", catalog)
+
+	// Index handler
 	parking := mux.NewRouter()
 	parking.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static"))))
 	http.Handle("/", &MyServer{parking})
 
-	// Recall /id is going to be our dx..   all items that come in with that will be looked up and 303'd
-	// Example URL:  http://opencoredata.org/id/dataset/c2d80e2a-cc30-430c-b0bd-cee9092688e3
-	dxroute := mux.NewRouter()
-	dxroute.HandleFunc("/id/graph/{id}", dx.RDFRedirection)
-	dxroute.HandleFunc("/id/graph/{id}/provenance", dx.ProvRedirection)   // PROV: prov redirection
-	dxroute.HandleFunc("/id/graph/{id}/pingback", dx.PingbackRedirection) // PROV: pingback for this resource  (would prefer a master /prov or server)
-	dxroute.HandleFunc("/id/dataset/{UUID}", dx.Redirection)
-	dxroute.HandleFunc(`/id/resource/{resourcepath:[a-zA-Z0-9=\-\/]+}`, dx.Redirection)
-	http.Handle("/id/", dxroute)
-
-	// Some early Prov Pingback work here...   Deal with void...  (show void..  allow .rdf file downloads)
-	dataset := mux.NewRouter()
-	dataset.HandleFunc("/doc/dataset/{id}", handlers.RenderWithProvHeader)      // PROV: test cast with Void..  would need to generalize
-	dataset.HandleFunc("/doc/dataset/{id}/provenance", handlers.RenderWithProv) // PROV: test cast with Void..  would need to generalize
-	dataset.HandleFunc("/doc/dataset/{id}/pingback", handlers.ProvPingback)     // PROV: pingback for this resource  (would prefer a master /prov or server)
-	http.Handle("/doc/", dataset)
+	// Need a good 404 handler
 
 	// Start the server...
 	log.Printf("About to listen on 9900. Go to http://127.0.0.1:9900/")
