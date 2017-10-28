@@ -18,7 +18,7 @@ import (
 
 type PageData struct {
 	SchemaOrg string
-	EventLog  []string
+	EventLog  map[string]string
 	ProvRDF   string
 }
 

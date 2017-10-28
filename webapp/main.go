@@ -8,6 +8,7 @@ import (
 	dx "lab.esipfed.org/provisium/webapp/dx"
 	handlers "lab.esipfed.org/provisium/webapp/handlers"
 	kv "lab.esipfed.org/provisium/webapp/kv"
+	services "lab.esipfed.org/provisium/webapp/services"
 )
 
 // MyServer struct for mux router
@@ -42,9 +43,10 @@ func main() {
 	// TODO  make all this  :)
 	// Section 4.2 https://www.w3.org/TR/2013/NOTE-prov-aq-20130430/#direct-http-query-service-invocation
 	// Services router
-	// services := mux.NewRouter()
+	sr := mux.NewRouter()
 	// services.HandleFunc("/api/v1/prov/service/{CALLSTRING}", services.ProvAQService)
-	// services.HandleFunc("/api/v1/event/{ID}", services.ProvAQService)
+	sr.HandleFunc("/api/v1/event/{ID}", services.ProvEventInfo)
+	http.Handle("/api/", sr)
 
 	// Index router, handle our main page uniquely...   may want to do some things with this eventulay
 	parking := mux.NewRouter()

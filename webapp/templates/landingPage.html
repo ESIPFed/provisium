@@ -98,11 +98,11 @@
 
 
                 <ul class="demo-list-icon mdl-list">
-                    {{ range $item := .EventLog }}
+                    {{ range $key, $value := .EventLog }}
                     <li class="mdl-list__item">
                         <span class="mdl-list__item-primary-content">
                             <i class="material-icons mdl-list__item-icon">event</i>
-                            {{.}}
+                            <a href="/api/v1/event/{{$key}}">Event Details</a> : {{$value}}
                         </span>
                     </li>
                     {{end}}

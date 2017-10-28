@@ -52,11 +52,17 @@ func NewProvEvent(docID, provFrag string) error {
 	return nil
 }
 
+func GetProvDetails(provID string) string {
+	// TODO..  get all the details about a prov event...
+	// TODO..  how to address some events bying type text/uri-list and others
+	// being something like turtle or other RDF encodings.
+}
+
 // GetProvLog gets all the logged events for a given docID
-func GetProvLog(docID string) []string {
+func GetProvLog(docID string) map[string]string {
 	db := getKVStoreRO()
 
-	var events []string
+	eventmap := make(map[string]string)
 
 	// Logic needed
 	// 1) loop over IDLinkBucket to find all provID that match a value of docID
@@ -66,13 +72,9 @@ func GetProvLog(docID string) []string {
 		b2 := tx.Bucket([]byte("LogBucket"))
 		c := b.Cursor()
 		for k, v := c.First(); k != nil; k, v = c.Next() {
-			// I should not need TrimSpace..  check and improve this...
-			// if strings.TrimSpace(string(v)) == strings.TrimSpace(docID) {
-			// log.Printf("Compare: %s %s\n", string(v), docID)
 			if strings.Contains(string(v), docID) {
-				// log.Printf("Match %s and  %s\n", string(v), docID)
 				v2 := b2.Get(k)
-				events = append(events, string(v2))
+				eventmap[string(k)] = string(v2)
 			}
 		}
 		return nil
@@ -89,7 +91,7 @@ func GetProvLog(docID string) []string {
 		log.Println(err)
 	}
 
-	return events
+	return eventmap
 
 }
 

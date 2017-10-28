@@ -4,7 +4,8 @@
 
 We propose to develop software for a server and standalone client that
 demonstrates the various approaches to PROV and PROV-AQ as described in the W3C
-Working Group specifications. We will demonstrate simple reference
+Working Group specifications (https://www.w3.org/TR/prov-aq/). 
+We will demonstrate simple reference
 implementations of these approaches in this project. The reference
 implementations will 1.) serve as a working examples (with open source code) of
 how end-to-end provenance systems could be constructed and 2.) provide a basis
