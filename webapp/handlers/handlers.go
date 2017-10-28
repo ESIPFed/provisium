@@ -7,6 +7,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
+	"strings"
 	"text/template"
 
 	"github.com/gorilla/mux"
@@ -14,19 +16,25 @@ import (
 	kv "lab.esipfed.org/provisium/webapp/kv"
 )
 
+type PageData struct {
+	SchemaOrg string
+	EventLog  []string
+	ProvRDF   string
+}
+
 // RenderLP displays the RDF resource and adds a prov pingback entry
 func RenderLP(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	ID := vars["ID"]
 
-	// get metadata for this document
-	mock, err := kv.GetResMetaData(ID)
+	// Get schemaOrg and event log for this document
+	so, err := kv.GetResMetaData(ID)
 	if err != nil {
 		log.Println(err)
 	}
+	events := kv.GetProvLog(ID)                     // TODO, this should return an error too
+	pd := PageData{SchemaOrg: so, EventLog: events} // struct to pass to the page
 
-	fmt.Println(r.URL.Path[5:])
-	fmt.Println(r.URL.Path[1:])
 	// Note the HACK in the next line..  this is just an ALPHA..  (even so this sucks)
 	// TODO..   think about issues of 303 here with /id/ and /doc/ since that could becomine an issue...
 	// TODO..   it's hard to expect community clients to read and address 303?
@@ -37,15 +45,12 @@ func RenderLP(w http.ResponseWriter, r *http.Request) {
 	// w.Header().Set("Content-type", "text/plain")
 
 	// Get template and display landing page meshed with metadata
-
-	// http.ServeFile(w, r, fmt.Sprintf("./static/%s", r.URL.Path[1:]))
-
 	ht, err := template.New("Landing page template").ParseFiles("templates/landingPage.html") //open and parse a template text file
 	if err != nil {
 		log.Printf("template parse failed: %s", err)
 	}
 
-	err = ht.ExecuteTemplate(w, "T", mock) //substitute fields in the template 't', with values from 'user' and write it out to 'w' which implements io.Writer
+	err = ht.ExecuteTemplate(w, "T", pd) //substitute fields in the template 't', with values from 'user' and write it out to 'w' which implements io.Writer
 	if err != nil {
 		log.Printf("htemplate execution failed: %s", err)
 	}
@@ -65,17 +70,40 @@ func ProvPingback(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error reading body: %v", err)
 	}
 
+	// TODO  Body should be a URI list... check for content-type: text/uri-list
+
 	fmt.Printf("Prov for %s\n", r.URL.Path[1:])
-	fmt.Println(string(body))
-	// TODO
-	// 1) validate this this  (400 if not)
-	// 2) store this this to KV store
-	// 3) Rolling to the master triple store..
-	w.WriteHeader(http.StatusNoContent)
+	pathElements := strings.Split(r.URL.Path[1:], "/")
+	docID := pathElements[2]
+	fmt.Println(docID)
+
+	scanner := bufio.NewScanner(strings.NewReader(string(body)))
+	var URLError error
+	for scanner.Scan() {
+		_, err := url.ParseRequestURI(scanner.Text()) // validate this is a URL
+		if err != nil {
+			URLError = err
+		}
+		fmt.Printf("URL: %s is valid: %v\n", scanner.Text(), err)
+	}
+
+	err = kv.NewProvEvent(docID, string(body))
+	if err != nil {
+		fmt.Println("Error trying to record the uploaded prov")
+		URLError = err
+	}
+
+	if URLError != nil {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+	} else {
+		w.WriteHeader(http.StatusNoContent)
+	}
+
 }
 
 // getProvRecord an un-exported function to generate MOCK prov data for testing
-// This is a test function only
+// This is a TEST function only
+// GET RID OF THIS ASAP
 func getProvRecord() string {
 
 	tr := []rdf.Triple{}

@@ -3,71 +3,99 @@ package kv
 import (
 	"fmt"
 	"log"
+	"strings"
+	"time"
 
 	"github.com/boltdb/bolt"
+	"github.com/google/uuid"
 )
 
 // newProvEvent must address a range of actions.  On a new event
 // we need to record the CLF of the event, the prov graph fragment
 // and associate the new prov event ID with the document ID
-func newProvEvent(docID, provFrag string) error {
+func NewProvEvent(docID, provFrag string) error {
 
-	fmt.Printf("For doc %s I am recording a new event", docID)
-
-	provID := "make UUID here"
+	provID := uuid.New().String()
+	fmt.Printf("For doc %s I am recording a new event %s \n", docID, provID)
 
 	// Need to try and make this transactional at some point...
 	// Out of scope initially for the project...
 	// would likely have to use some roll back on a not nil event
-	err := provLog(provID)
-	if err != nil {
-		log.Printf("ERROR:  could not log the event")
-	}
-	err = provRecord(provID, provFrag)
-	if err != nil {
-		log.Printf("ERROR:  could not record the provenance graph fragment")
-	}
-	err = docToProvID(docID, provID)
-	if err != nil {
-		log.Printf("ERROR:  could not associate provID to a docID")
-	}
+
+	db := getKVStoreRW()
+
+	// TODO..  connect these three updates into a single transaction wrapper
+	// Log the event
+	db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("LogBucket"))
+		logEvent := fmt.Sprintf("Pingback at: %s", time.Now().String())
+		err := b.Put([]byte(provID), []byte(logEvent))
+		return err
+	})
+
+	// Record the Prov
+	db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("ProvBucket"))
+		err := b.Put([]byte(provID), []byte(provFrag))
+		return err
+	})
+
+	// Associate DocID and ProvID
+	db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("IDLinkBucket"))
+		err := b.Put([]byte(provID), []byte(docID))
+		return err
+	})
+
+	db.Close()
 
 	return nil
 }
 
-// provLog will record a CLF log event in a KV store
-func provLog(provID string) error {
-	fmt.Printf("I will log an event %s\n", provID)
-	fmt.Printf("can I get the CLF string from gorilla..  or must I make it?\n")
+// GetProvLog gets all the logged events for a given docID
+func GetProvLog(docID string) []string {
+	db := getKVStoreRO()
 
-	return nil
-}
+	var events []string
 
-// provRecord will take a proposed prov event graph fragment and
-// first validate it as RDF and against any specified criteria.  It will
-// log it to the KV store and send it to the master graph
-func provRecord(provID, provFrag string) error {
+	// Logic needed
+	// 1) loop over IDLinkBucket to find all provID that match a value of docID
+	// 2) for each provID, pull event (value) from LogBucket
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("IDLinkBucket"))
+		b2 := tx.Bucket([]byte("LogBucket"))
+		c := b.Cursor()
+		for k, v := c.First(); k != nil; k, v = c.Next() {
+			// I should not need TrimSpace..  check and improve this...
+			// if strings.TrimSpace(string(v)) == strings.TrimSpace(docID) {
+			// log.Printf("Compare: %s %s\n", string(v), docID)
+			if strings.Contains(string(v), docID) {
+				// log.Printf("Match %s and  %s\n", string(v), docID)
+				v2 := b2.Get(k)
+				events = append(events, string(v2))
+			}
+		}
+		return nil
+	})
 
-	// err := validateAsRDF(provFrag)
-	// err = storeToDefaultGraph(provFrag)
+	if err != nil {
+		log.Println("Error reading file info from the KV store index.db")
+		log.Println(err)
+	}
 
-	fmt.Printf("I will store a prov graph fragment %s\n", provFrag)
+	err = db.Close()
+	if err != nil {
+		log.Println("Error closing database index.db")
+		log.Println(err)
+	}
 
-	return nil
-
-}
-
-// docToProvID will associagte a prov event ID with a document ID
-func docToProvID(docID, provID string) error {
-	fmt.Printf("I will associate a docID %s with a provID  %s\n", docID, provID)
-
-	return nil
+	return events
 
 }
 
 // GetDocIDs get all the files in our holding
 func GetDocIDs() []string {
-	db := getKVStore()
+	db := getKVStoreRO()
 
 	var IDs []string
 	err := db.View(func(tx *bolt.Tx) error {
@@ -97,7 +125,7 @@ func GetDocIDs() []string {
 // GetResMetaData will get the metadata for a dataset
 func GetResMetaData(docID string) (string, error) {
 	fmt.Printf("I will get the info for docID %s \n", docID)
-	db := getKVStore()
+	db := getKVStoreRO()
 
 	var jsonld string
 	err := db.View(func(tx *bolt.Tx) error {
@@ -120,7 +148,17 @@ func GetResMetaData(docID string) (string, error) {
 	return jsonld, err
 }
 
-func getKVStore() *bolt.DB {
+func getKVStoreRW() *bolt.DB {
+	db, err := bolt.Open("./kvStores/index.db", 0666, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// defer db.Close()
+
+	return db
+}
+
+func getKVStoreRO() *bolt.DB {
 	db, err := bolt.Open("./kvStores/index.db", 0666, &bolt.Options{ReadOnly: true})
 	if err != nil {
 		log.Fatal(err)
@@ -128,4 +166,56 @@ func getKVStore() *bolt.DB {
 	// defer db.Close()
 
 	return db
+}
+
+// Init the KV store in case we are starting empty and need some buckets made
+// Call from the main program at run time...
+func InitKV() error {
+
+	db := getKVStoreRW()
+
+	err := db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte("FileBucket"))
+		if err != nil {
+			return fmt.Errorf("create bucket: %s", err)
+		}
+		return nil
+	})
+
+	err = db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte("MetaDataBucket"))
+		if err != nil {
+			return fmt.Errorf("create bucket: %s", err)
+		}
+		return nil
+	})
+
+	err = db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte("IDLinkBucket"))
+		if err != nil {
+			return fmt.Errorf("create bucket: %s", err)
+		}
+		return nil
+	})
+
+	err = db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte("ProvBucket"))
+		if err != nil {
+			return fmt.Errorf("create bucket: %s", err)
+		}
+		return nil
+	})
+
+	err = db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte("LogBucket"))
+		if err != nil {
+			return fmt.Errorf("create bucket: %s", err)
+		}
+		return nil
+	})
+
+	db.Close()
+
+	return err
+
 }
