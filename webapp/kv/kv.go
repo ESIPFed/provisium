@@ -10,10 +10,10 @@ import (
 	"github.com/google/uuid"
 )
 
-// newProvEvent must address a range of actions.  On a new event
+// NewProvEvent must address a range of actions.  On a new event
 // we need to record the CLF of the event, the prov graph fragment
 // and associate the new prov event ID with the document ID
-func NewProvEvent(docID, provFrag string) error {
+func NewProvEvent(docID, provFrag, remoteAddress, contentType string) error {
 
 	provID := uuid.New().String()
 	fmt.Printf("For doc %s I am recording a new event %s \n", docID, provID)
@@ -28,7 +28,7 @@ func NewProvEvent(docID, provFrag string) error {
 	// Log the event
 	db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("LogBucket"))
-		logEvent := fmt.Sprintf("Pingback at: %s", time.Now().String())
+		logEvent := fmt.Sprintf("%s, %s, %s", remoteAddress, time.Now().String(), contentType)
 		err := b.Put([]byte(provID), []byte(logEvent))
 		return err
 	})
@@ -52,10 +52,55 @@ func NewProvEvent(docID, provFrag string) error {
 	return nil
 }
 
-func GetProvDetails(provID string) string {
+// TODO..  get this the prov vetted by provider
+// GetProvCuratedGraph
+
+// TODO..  get the graph that is the roll up of all
+// prov sent in.  Which means I need to follow up on the
+// URI-Lists and build a graph from them.
+// GetProvCommunityGraph
+
+//GetProvDetails Return the entry for a specific prov record
+func GetProvDetails(provID string) (string, string, error) {
 	// TODO..  get all the details about a prov event...
 	// TODO..  how to address some events bying type text/uri-list and others
 	// being something like turtle or other RDF encodings.
+	fmt.Printf("Request URI list entries for provID %s \n", provID)
+	db := getKVStoreRO()
+
+	var provEntry string
+	var contentType string
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("ProvBucket"))
+		b2 := tx.Bucket([]byte("LogBucket"))
+
+		v := b.Get([]byte(provID))
+		provEntry = string(v)
+
+		v2 := b2.Get([]byte(provID))
+		logLine := strings.Split(string(v2), ",") // 3rd entry is content-type, see NewProvEvent write to this bucket
+		if len(logLine) == 3 {
+			contentType = logLine[2]
+		} else {
+			contentType = "text/plain"
+		}
+
+		log.Println(logLine)
+
+		return nil
+	})
+
+	if err != nil {
+		log.Println("Error reading from Buckets")
+	}
+
+	err = db.Close()
+	if err != nil {
+		log.Println("Error closing database index.db")
+		log.Println(err)
+	}
+
+	return provEntry, contentType, nil
 }
 
 // GetProvLog gets all the logged events for a given docID
@@ -92,7 +137,6 @@ func GetProvLog(docID string) map[string]string {
 	}
 
 	return eventmap
-
 }
 
 // GetDocIDs get all the files in our holding

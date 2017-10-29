@@ -87,7 +87,10 @@ func ProvPingback(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("URL: %s is valid: %v\n", scanner.Text(), err)
 	}
 
-	err = kv.NewProvEvent(docID, string(body))
+	// TODO..  require content type to be set?  must be URI list or RDF of some form
+	// if not error..  4** conent not supported
+	contentType := r.Header.Get("Content-Type")
+	err = kv.NewProvEvent(docID, string(body), r.RemoteAddr, contentType)
 	if err != nil {
 		fmt.Println("Error trying to record the uploaded prov")
 		URLError = err

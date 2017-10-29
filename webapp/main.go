@@ -49,9 +49,9 @@ func main() {
 	http.Handle("/api/", sr)
 
 	// Index router, handle our main page uniquely...   may want to do some things with this eventulay
-	parking := mux.NewRouter()
-	parking.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static"))))
-	http.Handle("/", &MyServer{parking})
+	root := mux.NewRouter()
+	root.PathPrefix("/").Handler(http.StripPrefix("/", http.FileServer(http.Dir("./static"))))
+	http.Handle("/", &MyServer{root})
 
 	// Static router for images, css, js, etc...  (assets)
 	static := mux.NewRouter()
