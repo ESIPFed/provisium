@@ -24,7 +24,7 @@
         .demo-card-wide>.mdl-card__title {
             color: #fff;
             height: 176px;
-            background: url('/static/assets/dataset.jpg') center / cover;
+            background: url('/static/assets/dataset.jpg');
         }
 
         .demo-card-wide>.mdl-card__menu {
@@ -70,8 +70,8 @@
 
 
                 <div class="mdl-grid">
-                    <div class="mdl-cell mdl-cell--6-col">
 
+                    <div class="mdl-cell mdl-cell--6-col">
                         <div class="demo-card-wide mdl-card mdl-shadow--2dp">
                             <div class="mdl-card__title">
                                 <h2 class="mdl-card__title-text">Data XYZ</h2>
@@ -81,7 +81,7 @@
                                 parse jsonld here..
 
                             </div>
-                            <div class="mdl-card__actions mdl-card--border">
+                            <!-- <div class="mdl-card__actions mdl-card--border">
                                 <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
                                     More to come </a>
                             </div>
@@ -89,9 +89,32 @@
                                 <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                                     <i class="material-icons">share</i>
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
+
+
+                    <div class="mdl-cell mdl-cell--6-col">
+                            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                                <div class="mdl-card__title">
+                                    <h2 class="mdl-card__title-text">Services</h2>
+                                </div>
+                                <div class="mdl-card__supporting-text">
+    
+                                    <ul>
+                                        <li> <a href="/api/v1/docgraph/DOCID">Service 1 Doc Graph</a> </li>
+                                        <li> <a href="/api/v1/docevent/DOCID">Service 1 Doc Report</a> </li>
+                                    </ul>
+    
+                                </div>
+                        
+                                <div class="mdl-card__menu">
+                                    <!-- <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                                        <i class="material-icons">share</i>
+                                    </button> -->
+                                </div>
+                            </div>
+                        </div>
 
 
 

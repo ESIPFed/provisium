@@ -46,6 +46,8 @@ func main() {
 	sr := mux.NewRouter()
 	// services.HandleFunc("/api/v1/prov/service/{CALLSTRING}", services.ProvAQService)
 	sr.HandleFunc("/api/v1/event/{ID}", services.ProvEventInfo)
+	sr.HandleFunc("/api/v1/docgraph/{ID}", services.DocGraph)
+	sr.HandleFunc("/api/v1/docevent/{ID}", services.DocReport)
 	http.Handle("/api/", sr)
 
 	// Index router, handle our main page uniquely...   may want to do some things with this eventulay
