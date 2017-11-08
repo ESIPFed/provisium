@@ -12,7 +12,7 @@
 
   <!-- Wide card with share menu button -->
   <style>
-        .homelink {
+    .homelink {
       text-decoration: none !important;
       color: black !important;
     }
@@ -30,8 +30,14 @@
     .demo-card-wide>.mdl-card__menu {
       color: #fff;
     }
+
+    #footer {
+      bottom: 0;
+      width: 100%;
+      position: absolute;
+    }
   </style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
 
@@ -42,22 +48,26 @@
       <div class="mdl-layout__header-row">
         <!-- Title -->
         <span class="mdl-layout-title">
-            <a class="homelink" href="/">Provisium</a>            
+          <a class="homelink" href="/">Provisium</a>
         </span>
         <!-- Add spacer, to align navigation to the right -->
         <div class="mdl-layout-spacer"></div>
         <!-- Navigation. We hide it in small screens. -->
         <nav class="mdl-navigation mdl-layout--large-screen-only">
-            <a class="mdl-navigation__link"   href="/">Home</a>
-            <a class="mdl-navigation__link"   href="/catalog/listing">Catalog</a>
+          <a class="mdl-navigation__link" href="/">Home</a>
+          <a class="mdl-navigation__link" href="/catalog/listing">Catalog</a>
+          <a  class="mdl-navigation__link"  target="_blank" href="https://github.com/ESIPFed/provisium">Git Hub Repo</a>          
+          <a  class="mdl-navigation__link"  target="_blank" href="http://www.esipfed.org/esip-lab">An ESIP Lab project</a>
         </nav>
       </div>
     </header>
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">Provisium</span>
       <nav class="mdl-navigation">
-          <a class="mdl-navigation__link"   href="/">Home</a>
-          <a class="mdl-navigation__link"   href="/catalog/listing">Catalog</a>
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/catalog/listing">Catalog</a>
+        <a  class="mdl-navigation__link"  target="_blank" href="https://github.com/ESIPFed/provisium">Git Hub Repo</a>          
+        <a  class="mdl-navigation__link"  target="_blank" href="http://www.esipfed.org/esip-lab">An ESIP Lab project</a>
       </nav>
     </div>
     <main class="mdl-layout__content">
@@ -92,21 +102,24 @@
 
 
       </div>
+
+      <!-- <footer id="footer" class="mdl-mini-footer">
+        <div class="mdl-mini-footer__left-section">
+          <div class="mdl-logo">Provisium</div>
+          <ul class="mdl-mini-footer__link-list">
+            <li>
+              <a target="_blank" href="http://www.esipfed.org/esip-lab">Funded by the ESIP Lab</a>
+            </li>
+            <li>
+              <a target="_blank" href="https://github.com/ESIPFed/provisium">Git Hub Repo</a>
+            </li>
+          </ul>
+        </div>
+      </footer> -->
+
     </main>
 
-    <footer class="mdl-mini-footer">
-      <div class="mdl-mini-footer__left-section">
-        <div class="mdl-logo">Provisium</div>
-        <ul class="mdl-mini-footer__link-list">
-          <li>
-            <a target="_blank" href="http://www.esipfed.org/esip-lab">Funded by the ESIP Lab</a>
-          </li>
-          <li>
-            <a target="_blank" href="https://github.com/ESIPFed/provisium">Git Hub Repo</a>
-          </li>
-        </ul>
-      </div>
-    </footer>
+
 
   </div>
 
