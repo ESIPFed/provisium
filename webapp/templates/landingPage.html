@@ -36,7 +36,7 @@
         {{.SchemaOrg}}
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
 </head>
 
 <body>
@@ -94,27 +94,45 @@
                     </div>
 
 
+               
+
+
                     <div class="mdl-cell mdl-cell--6-col">
-                            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-                                <div class="mdl-card__title">
-                                    <h2 class="mdl-card__title-text">Services</h2>
-                                </div>
-                                <div class="mdl-card__supporting-text">
-    
-                                    <ul>
-                                        <li> <a href="/api/v1/docgraph/DOCID">Service 1 Doc Graph</a> </li>
-                                        <li> <a href="/api/v1/docevent/DOCID">Service 1 Doc Report</a> </li>
-                                    </ul>
-    
-                                </div>
-                        
-                                <div class="mdl-card__menu">
-                                    <!-- <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                        <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                            <div class="mdl-card__title">
+                                <h2 class="mdl-card__title-text">Services</h2>
+                            </div>
+                            <div class="mdl-card__supporting-text">
+
+                                <ul>
+                                    <li>
+                                        <a href="/api/v1/docgraph/DOCID">Service 1 Doc Graph</a>
+                                    </li>
+                                    <li>
+                                        <a href="/api/v1/docevent/DOCID">Service 1 Doc Report</a>
+                                    </li>
+                                </ul>
+
+                            </div>
+
+                            <div class="mdl-card__menu">
+                                <!-- <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
                                         <i class="material-icons">share</i>
                                     </button> -->
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="mdl-cell mdl-cell--12-col">
+                        <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                            <div class="mdl-card__supporting-text">
+                                <div class="container">
+                                    <div id="graph"></div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
 
 
@@ -152,8 +170,10 @@
         </footer>
 
     </div>
+    <script src="/static//bundle.js"></script>
 
 </body>
+
 
 </html>
 {{end}}
