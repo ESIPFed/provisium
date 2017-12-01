@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"path/filepath"
 
 	"github.com/boltdb/bolt"
@@ -51,7 +50,7 @@ func main() {
 		log.Println(err)
 	}
 
-	// Use json gold to frame the JSON-LD and extract the
+	// Frame the JSON-LD and extract the
 	// UUID and filename to place in the KV store
 	// array of fileInfo strucres
 	// fileInfo = []fileInfo{}
@@ -80,7 +79,7 @@ func main() {
 	}
 }
 
-// frameDoc using JSON-LD frame API to generate a JSON we can easly
+// frameDoc using JSON-LD frame API to generate a JSON we can easily
 // map to our data struct
 func frameDoc(dat []byte) []FramedFileInfo {
 	proc := ld.NewJsonLdProcessor()
@@ -139,19 +138,6 @@ func filePathGlob(directory string) ([]string, error) {
 		fmt.Println(err)
 	}
 	return matches, err
-}
-
-// NOT USED  use path glob function above..   dreprecate this one...
-func getMetaDataFile(directory string) ([]string, error) {
-	searchDir := directory
-
-	fileList := []string{}
-	err := filepath.Walk(searchDir, func(path string, f os.FileInfo, err error) error {
-		fileList = append(fileList, path)
-		return nil
-	})
-
-	return fileList, err
 }
 
 func initBuckets(db *bolt.DB) error {

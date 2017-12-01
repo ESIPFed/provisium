@@ -20,7 +20,7 @@
   "name": "data2.csv",
   "publisher": {
     "@type": "Organization",
-    "description": "This is a mock dataset published by ESIP labs for testing provance work.",
+    "description": "This is a mock data set published by ESIP labs for testing provenance  work.",
     "name": "ESIP Federation",
     "url": "http://esipfed.org"
   },
