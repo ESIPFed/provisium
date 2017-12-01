@@ -31,7 +31,7 @@
       background: url('./assets/catalog.jpg') center / cover;
     }
 
-    .demo-card-wide>.mdl-card__external{
+    .demo-card-wide>.mdl-card__external {
       color: #fff;
       height: 176px;
       background: url('./assets/external.jpg') center / cover;
@@ -40,16 +40,18 @@
     .demo-card-wide>.mdl-card__menu {
       color: #fff;
     }
+
     /* #footer {
       bottom: 0;
       width: 100%;
       position: absolute;
     } */
+
     .mdl-mini-footer {
-  flex: 0 0 auto;
-}
+      flex: 0 0 auto;
+    }
   </style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
 
@@ -66,20 +68,20 @@
         <div class="mdl-layout-spacer"></div>
         <!-- Navigation. We hide it in small screens. -->
         <nav class="mdl-navigation mdl-layout--large-screen-only">
-          <a class="mdl-navigation__link"   href="/">Home</a>
-          <a class="mdl-navigation__link"   href="/catalog/listing">Catalog</a>
-          <a  class="mdl-navigation__link"  target="_blank" href="https://github.com/ESIPFed/provisium">Git Hub Repo</a>          
-          <a  class="mdl-navigation__link"  target="_blank" href="http://www.esipfed.org/esip-lab">An ESIP Lab project</a>
+          <a class="mdl-navigation__link" href="/">Home</a>
+          <a class="mdl-navigation__link" href="/catalog/listing">Catalog</a>
+          <a class="mdl-navigation__link" target="_blank" href="https://github.com/ESIPFed/provisium">Git Hub Repo</a>
+          <a class="mdl-navigation__link" target="_blank" href="http://www.esipfed.org/esip-lab">An ESIP Lab project</a>
         </nav>
       </div>
     </header>
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">Provisium</span>
       <nav class="mdl-navigation">
-          <a class="mdl-navigation__link"   href="/">Home</a>
-          <a class="mdl-navigation__link"   href="/catalog/listing">Catalog</a>
-          <a  class="mdl-navigation__link"  target="_blank" href="https://github.com/ESIPFed/provisium">Git Hub Repo</a>          
-          <a  class="mdl-navigation__link"  target="_blank" href="http://www.esipfed.org/esip-lab">An ESIP Lab project</a>
+        <a class="mdl-navigation__link" href="/">Home</a>
+        <a class="mdl-navigation__link" href="/catalog/listing">Catalog</a>
+        <a class="mdl-navigation__link" target="_blank" href="https://github.com/ESIPFed/provisium">Git Hub Repo</a>
+        <a class="mdl-navigation__link" target="_blank" href="http://www.esipfed.org/esip-lab">An ESIP Lab project</a>
       </nav>
     </div>
     <main class="mdl-layout__content">
@@ -112,72 +114,66 @@
 
 
         <div class="mdl-cell mdl-cell--4-col">
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__catalog">
-                <h2 class="mdl-card__title-text"></h2>
-              </div>
-              <div class="mdl-card__supporting-text">
-                To test the provenance patterns a set of mock datasets have been created. 
-                Access to these mock datasets, their provenance
-                and pingbacks is open and unrestricted and for TESTING.  
-  
-              </div>
-              <div class="mdl-card__actions mdl-card--border">
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/catalog/listing">
-                  Mock data catalog</a>
-              </div>
-              <div class="mdl-card__menu">
-                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                  <!-- <i class="material-icons">share</i> -->
-                </button>
-              </div>
+          <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__catalog">
+              <h2 class="mdl-card__title-text"></h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              To test the provenance patterns a set of mock datasets have been created. Access to these mock datasets, their provenance
+              and pingbacks is open and unrestricted and for TESTING.
+
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="/catalog/listing">
+                Mock data catalog</a>
+            </div>
+            <div class="mdl-card__menu">
+              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                <!-- <i class="material-icons">share</i> -->
+              </button>
             </div>
           </div>
+        </div>
 
-          <div class="mdl-cell mdl-cell--4-col">
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__external">
-                <h2 class="mdl-card__title-text">Reference</h2>
-              </div>
-              <div class="mdl-card__supporting-text">
-                The <a href="https://www.rd-alliance.org/groups/provenance-patterns-wg"
-                target="_blank">RDA Provenance Patterns WG</a> and Provenance patterns DB
-  
-              </div>
-              <div class="mdl-card__actions mdl-card--border">
-                <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" target="_blank" href="http://patterns.promsns.org">
-                  Provenance Patterns DB</a>
-              </div>
-              <div class="mdl-card__menu">
-                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                  <!-- <i class="material-icons">share</i> -->
-                </button>
-              </div>
+
+
+        <div class="mdl-cell mdl-cell--4-col">
+          <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__external">
+              <h2 class="mdl-card__title-text">Reference</h2>
             </div>
-          </div>
+            <div class="mdl-card__supporting-text">
+              W3C Prov: This site provides a non-normative overview of the PROV Family of Documents and provides a roadmap to using them.
 
-          <div class="mdl-cell mdl-cell--4-col">
-            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__external">
-                <h2 class="mdl-card__title-text">Reference</h2>
-              </div>
-              <div class="mdl-card__supporting-text">
-                W3C Prov: This site provides a non-normative overview of the PROV
-                 Family of Documents and provides a roadmap to using them.
-  
-              </div>
-              <div class="mdl-card__actions mdl-card--border">
+              <ul>
+                <li>
+                  <a target="_blank" href="https://www.w3.org/TR/prov-primer/">
+                    Prov Primer</a>
+                </li>
+
+                <li>
+                  <a target="_blank" href="http://patterns.promsns.org">
+                    Provenance Patterns DB</a>
+                </li>
+
+                <li>
+                  <a href="https://www.rd-alliance.org/groups/provenance-patterns-wg" target="_blank">RDA Provenance Patterns WG</a> 
+                </li>
+              </ul>
+
+            </div>
+            <!-- <div class="mdl-card__actions mdl-card--border">
                 <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" 
                 target="_blank" href="https://www.w3.org/TR/prov-primer/">
                   Prov Primer</a>
-              </div>
-              <div class="mdl-card__menu">
-                <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-                  <!-- <i class="material-icons">share</i> -->
-                </button>
-              </div>
+              </div> -->
+            <div class="mdl-card__menu">
+              <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
+                <!-- <i class="material-icons">share</i> -->
+              </button>
             </div>
           </div>
+        </div>
 
 
       </div>
@@ -198,12 +194,12 @@
         </ul>
       </div>
     </footer> -->
-   
+
 
   </div>
 
 
-  
+
 </body>
 
 </html>
