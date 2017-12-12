@@ -2,12 +2,16 @@
     "@context": {
         "@vocab": "http://schema.org/",
         "re3data": "http://example.org/re3data/0.1/",
-        "prov": "http://www.w3.org/ns/prov#"
+        "prov": "http://www.w3.org/ns/prov#",
+	"sweet": "http://sweetontology.org/"
     },
     "@id": "http://provisium.io/id/dataset/bcd15975-680c-47db-a062-ac0bb6e66816",
     "@type": "Dataset",
     "description": "Data set description",
+    "sweet:humanKnowledgeDomain": "Geology",
+    "sweet:realmGeol": "Crust", 
     "prov:has_provenance": "PROV LINK",
+    "prov:pingback" : "http://example.com/...",
     "prov:has_anchor": "http://provisium.io/id/dataset/bcd15975-680c-47db-a062-ac0bb6e66816",
     "prov:has_query_service" : "http://example.com/provenance-query-service/",
     "distribution": {
@@ -39,3 +43,4 @@
     "url": "http://provisium.io/id/dataset/bcd15975-680c-47db-a062-ac0bb6e66816",
     "variableMeasured": "Mock measurement"
 }
+lo
