@@ -1,0 +1,36 @@
+debug = false
+checkNewVersion = true
+traefikLogsFile = "/logs/traefik.log"
+logLevel = "INFO"
+defaultEntryPoints = ["https","http"]
+
+[accessLog]
+filePath = "/logs/access.log"
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+#    [entryPoints.http.redirect]
+#    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+  [entryPoints.https.tls]
+
+[retry]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "provisium.io"
+watch = true
+exposedbydefault = false
+
+[acme]
+email = "foo@foo.org"
+storage = "/acme/acme.json"
+entryPoint = "https"
+OnHostRule = true
+
+[[acme.domains]]
+  main = "provisium.io"
+[[acme.domains]]
+  main = "provohash.xyz"
