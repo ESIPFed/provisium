@@ -1,0 +1,26 @@
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix eos:  <http://esipfed.org/prov/eos#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix oa:   <http://www.w3.org/ns/oa#> .
+@prefix dc:   <http://purl.org/dc/elements/1.1/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix :     <http://provisium.io#> .
+
+:example
+   a oa:Annotation;
+   oa:hasBody :exampleAnnBody;
+   oa:hasTarget <http://www.usgs.gov/dataset/uri>;
+   oa:motivatedBy oa:commenting;
+   dcterms:creator <http://www.usgs.gov/person/uri>;
+   dcterms:created "2017-01-01T12:00:00Z" 
+.
+
+:exampleAnnBody;
+   a oa:TextualBody;
+   rdf:value "This dataset has an error. We found that...";
+   dc:language "en";
+   dc:format "text/html"
+.

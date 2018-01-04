@@ -1,6 +1,7 @@
 @prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix eos:  <http://esipfed.org/prov/eos#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix :     <http://provisium.io#> .
 
@@ -19,7 +20,7 @@
 .
 
 :dataset
-   a prov:Entity;
+   a prov:Entity, eos:product;
    rdfs:label "Some dataset from USGS"^^xsd:string;
    prov:wasGeneratedBy  :processingActivity2;
    prov:wasDerivedFrom  :somewhatProcessedData;
@@ -27,14 +28,14 @@
 .
 
 :processingActivity2 
-   a prov:Activity; 
+   a prov:Activity, eos:processStep; 
    rdfs:label "A processing activity"^^xsd:string;
    prov:used              :somewhatProcessedData;
    prov:wasAssociatedWith :usgs;
 .
 
 :somewhatProcessedData
-   a prov:Entity;
+   a prov:Entity, eos:product;
    rdfs:label "An intermediate dataset"^^xsd:string;
    prov:wasGeneratedBy  :processingActivity1;
    prov:wasDerivedFrom  :rawSensorMeasurements;
@@ -42,7 +43,7 @@
 .
 
 :processingActivity1
-   a prov:Activity;
+   a prov:Activity, eos:processStep;
    rdfs:label "First processing activity"^^xsd:string;
    prov:startedAtTime    "2011-07-14T01:01:01Z"^^xsd:dateTime;
    prov:wasAssociatedWith :usgs;
@@ -52,20 +53,28 @@
 .
 
 :rawSensorMeasurements
-   a prov:Entity;
+   a prov:Entity, eos:product;
    rdfs:label "The raw data that came off the sensors"^^xsd:string;
    prov:wasAttributedTo :usgs;
 .
 
 :processingCode
-   a prov:Entity;
+   a prov:Entity, eos:software;
    rdfs:label "Some processing code"^^xsd:string;
+   prov:wasAttributedTo :usgs;
+.
+
+:pingBackService
+   a prov:Activity, eos:PingBackService;
+   rdfs:label "An instance of a Ping-Back service"^^xsd:string;
    prov:wasAttributedTo :usgs;
 .
 
 :pingBacks
    rdfs:label "URIs submitted to the pingback service"^^xsd:string;
-   a prov:Collection;
+   a prov:Collection, eos:PingBackCollection;
+   prov:wasGeneratedBy :pingBackService;
+   prov:wasDerivedFrom :dataset;
 
    prov:hadMember
       <http://provisium.io#Dataset001>,
