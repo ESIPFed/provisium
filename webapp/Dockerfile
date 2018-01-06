@@ -7,7 +7,6 @@ FROM alpine
 
 # Add in the static elements (could also mount these from local filesystem)
 ADD webapp /
-ADD ./dataResources /dataResources
 ADD ./kvStores /kvStores
 ADD ./static /static
 ADD ./templates /templates

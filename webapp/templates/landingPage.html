@@ -128,13 +128,13 @@
 
                                 <ul>
                                     <li>
-                                        <a href="/api/v1/docgraph/DOCID">Service 1 Doc Graph:  The full known prov graph for this resource</a>
+                                        <a href="/api/v1/pingback/catalog?target={{.TargetURI}}">Pingback: List of the resources in pinback catalog</a>
                                     </li>
                                     <li>
-                                        <a href="/api/v1/docevent/DOCID">Service 2 Event Report: The list of all know prov events on this resource </a>
+                                        <a href="/api/v1/pingback/events?target={{.TargetURI}}">Pingback: List of pingback events on this resource </a>
                                     </li>
                                     <li>
-                                        <a href="/api/v1/docevent/DOCID">Service 3 Download: Add in a data download for this mock data in case it is needed in testing workflows </a>
+                                        <a href="http://{{.Host}}/static/dataResources/{{.DataFile}}">Data File:  Link to the mock data in case needed in future testing </a>
                                     </li>
                                 </ul>
 
@@ -170,7 +170,7 @@
                     <li class="mdl-list__item">
                         <span class="mdl-list__item-primary-content">
                             <i class="material-icons mdl-list__item-icon">event</i>
-                            <a href="/api/v1/event/{{$key}}">Event Details</a> : {{$value}}
+                            <a href="/api/v1/pingback/event/{{$key}}">Event Details</a> : {{$value}}
                         </span>
                     </li>
                     {{end}}

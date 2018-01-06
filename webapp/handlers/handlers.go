@@ -13,6 +13,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/knakk/rdf"
+	"github.com/tomnomnom/linkheader"
 	kv "lab.esipfed.org/provisium/webapp/kv"
 )
 
@@ -20,6 +21,10 @@ type PageData struct {
 	SchemaOrg string
 	EventLog  map[string]string
 	ProvRDF   string
+	Host      string
+	TargetURI string
+	UUID      string
+	DataFile  string
 }
 
 // RenderLP displays the RDF resource and adds a prov pingback entry
@@ -32,8 +37,13 @@ func RenderLP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-	events := kv.GetProvLog(ID)                     // TODO, this should return an error too
-	pd := PageData{SchemaOrg: so, EventLog: events} // struct to pass to the page
+	events, err := kv.GetProvLog(ID) // TODO, this should return an error too
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	targeturi := r.Host + r.URL.String()
+	pd := PageData{SchemaOrg: so, EventLog: events, Host: r.Host, TargetURI: targeturi, UUID: ID, DataFile: getDataFileName(ID)} // struct to pass to the page
 
 	// Note the HACK in the next line..  this is just an ALPHA..  (even so this sucks)
 	// TODO..   think about issues of 303 here with /id/ and /doc/ since that could becomine an issue...
@@ -60,22 +70,81 @@ func RenderLP(w http.ResponseWriter, r *http.Request) {
 // RenderProv shows the prov of a resource, it's just a dummy function now.....
 // TODO  need to have this actually get some PROV  :)
 func RenderProv(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(getProvRecord()))
+	w.Write([]byte(getProvRecord())) // TODO.. make this return something sorta real pulled from a KV store or something....
 }
 
-// ProvPingback Handles the PROV pingback on a resource
+// ProvPingback Handles the PROV pingback on a resource, ref: https://www.w3.org/TR/prov-aq/ Section 5
 func ProvPingback(w http.ResponseWriter, r *http.Request) {
+
+	// If we are not POST..  get out
+	if r.Method != "POST" {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	// require uri list for pingback...  otherwise, get out
+	contentType := r.Header.Get("Content-Type")
+	if contentType != "text/uri-list" {
+		w.WriteHeader(http.StatusNotAcceptable)
+		return
+	}
+
+	// read the body..   if trouble..   get out
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Printf("Error reading body: %v", err)
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		return
 	}
 
-	// TODO  Body should be a URI list... check for content-type: text/uri-list
+	var status int
+	var docerr error
 
-	fmt.Printf("Prov for %s\n", r.URL.Path[1:])
-	pathElements := strings.Split(r.URL.Path[1:], "/")
-	docID := pathElements[2]
-	fmt.Println(docID)
+	// The pingback can have link header so look for/get them. ref: Section 5, examples 13 and 14 of https://www.w3.org/TR/prov-aq/
+	links := r.Header.Get("Link") // NOTE  via https://tools.ietf.org/html/rfc5988#section-5.5 multiple entries exposed by comma
+	if links != "" {
+		fmt.Println(links)
+		linksitems := linkheader.Parse(links)
+		for _, link := range linksitems {
+			// validate the links..  store them in a KV store designed for these relations
+			// _, err := url.ParseRequestURI(link.URL) // validate this is a URL
+			// TODO if no anchor...  set to target URI
+			status, docerr = recordLinkItem(link.URL, link.Rel, r.RemoteAddr, link.Param("anchor"))
+		}
+	}
+
+	// check the length of the body..  if set to 0 or evaluates to 0, don't bother to record anything (duh...)
+	contentLength := r.Header.Get("Content-Length") // a string, not an int
+	evalBodyLength := len(body)                     // an int, not a string
+
+	if contentLength == "0" || evalBodyLength == 0 {
+		fmt.Println("Body set to or is 0..  do nothing")
+	} else {
+		// record the body
+		status, docerr = recordBody(body, contentType, r)
+	}
+
+	fmt.Println(docerr)
+
+	// We REALLY made it..   tell them all is OK with 204 empty
+	w.WriteHeader(status)
+}
+
+func recordLinkItem(url, rel, ip, anchor string) (int, error) {
+
+	fmt.Printf("URL: %s; Rel: %s Anchor: %s\n", url, rel, anchor)
+
+	err := kv.NewProvEvent(anchor, url, ip, rel)
+	if err != nil {
+		fmt.Println("Error trying to record the uploaded prov")
+		// w.WriteHeader(http.StatusUnprocessableEntity)
+		return http.StatusUnprocessableEntity, err
+	}
+
+	return http.StatusNoContent, nil
+}
+
+func recordBody(body []byte, contentType string, r *http.Request) (int, error) {
 
 	scanner := bufio.NewScanner(strings.NewReader(string(body)))
 	var URLError error
@@ -84,23 +153,27 @@ func ProvPingback(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			URLError = err
 		}
-		fmt.Printf("URL: %s is valid: %v\n", scanner.Text(), err)
+		fmt.Printf("URL %s report: %v\n", scanner.Text(), err)
+	}
+	if URLError != nil {
+		log.Printf("Error in the sent URLs: %v", URLError)
+		// w.WriteHeader(http.StatusUnprocessableEntity)
+		return http.StatusUnprocessableEntity, URLError
 	}
 
-	// TODO..  require content type to be set?  must be URI list or RDF of some form
-	// if not error..  4** conent not supported
-	contentType := r.Header.Get("Content-Type")
-	err = kv.NewProvEvent(docID, string(body), r.RemoteAddr, contentType)
+	// We made it, record is valid..  try and record it now
+	fmt.Printf("Recording a new prov event for %s\n", r.URL.Path[1:])
+	pathElements := strings.Split(r.URL.Path[1:], "/")
+	docID := pathElements[2]
+
+	err := kv.NewProvEvent(docID, string(body), r.RemoteAddr, contentType)
 	if err != nil {
 		fmt.Println("Error trying to record the uploaded prov")
-		URLError = err
+		// w.WriteHeader(http.StatusUnprocessableEntity)
+		return http.StatusUnprocessableEntity, err
 	}
 
-	if URLError != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
-	} else {
-		w.WriteHeader(http.StatusNoContent)
-	}
+	return http.StatusNoContent, nil
 
 }
 
@@ -168,4 +241,15 @@ func getProvRecord() string {
 	foo.Flush()
 	return string(b.Bytes())
 
+}
+
+// GetData will get the data file
+func getDataFileName(UID string) string {
+
+	content, err := kv.GetResData(UID)
+	if err != nil {
+		log.Println("error getting file content..  need to 3** a return and log")
+	}
+
+	return content
 }

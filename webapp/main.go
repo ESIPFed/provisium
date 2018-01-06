@@ -16,12 +16,10 @@ type MyServer struct {
 	r *mux.Router
 }
 
-// Our main is really just route collection....  from here you can see what URLs go
-// to what functions.  It adds in a few default header elements and fires up
-// the listener.
+// Our main is really just router.  It adds in a few default header elements and fires up  the listener.
 func main() {
 	// DX router (implements our LODish 303 pattern which should be demonstrated here to ensure alignment)
-	// TODO: All three patterns go to the same function..  make this one pattern matcher/one line
+	// TODO: All three patterns go to the same function..  make this one regex match
 	dxroute := mux.NewRouter()
 	dxroute.HandleFunc("/id/dataset/{ID}", dx.Redirection)            // id -> doc 303 redirection
 	dxroute.HandleFunc("/id/dataset/{ID}/provenance", dx.Redirection) // PROV: prov redirection
@@ -33,6 +31,7 @@ func main() {
 	dataset.HandleFunc("/doc/dataset/{ID}", handlers.RenderLP)              // PROV: test cast with Void..  would need to generalize
 	dataset.HandleFunc("/doc/dataset/{ID}/provenance", handlers.RenderProv) // PROV: test cast with Void..  would need to generalize
 	dataset.HandleFunc("/doc/dataset/{ID}/pingback", handlers.ProvPingback) // PROV: pingback for this resource  (would prefer a master /prov or server)
+
 	http.Handle("/doc/", dataset)
 
 	// Catalog router
@@ -40,14 +39,11 @@ func main() {
 	catalog.HandleFunc("/catalog/listing", handlers.CatalogListing) // PROV: test cast with Void..  would need to generalize
 	http.Handle("/catalog/", catalog)
 
-	// TODO  make all this  :)
-	// Section 4.2 https://www.w3.org/TR/2013/NOTE-prov-aq-20130430/#direct-http-query-service-invocation
-	// Services router
+	// Services router:  Section 4.2 https://www.w3.org/TR/2013/NOTE-prov-aq-20130430/#direct-http-query-service-invocation
 	sr := mux.NewRouter()
-	// services.HandleFunc("/api/v1/prov/service/{CALLSTRING}", services.ProvAQService)
-	sr.HandleFunc("/api/v1/event/{ID}", services.ProvEventInfo)
-	sr.HandleFunc("/api/v1/docgraph/{ID}", services.DocGraph)
-	sr.HandleFunc("/api/v1/docevent/{ID}", services.DocReport)
+	sr.HandleFunc("/api/v1/pingback/catalog", services.PingBackCatalog)
+	sr.HandleFunc("/api/v1/pingback/events", services.PingBackEvents)
+	sr.HandleFunc("/api/v1/pingback/event/{ID}", services.PingBackContent)
 	http.Handle("/api/", sr)
 
 	// Index router, handle our main page uniquely...   may want to do some things with this eventulay
@@ -60,7 +56,7 @@ func main() {
 	static.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 	http.Handle("/static/", &MyServer{static})
 
-	// Need a good 404 router
+	// Need a good 404 router...  I'm lost without one...
 
 	// Init the KV store to ensure all buckets are ready....
 	err := kv.InitKV()
@@ -84,6 +80,7 @@ func (s *MyServer) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	rw.Header().Set("Access-Control-Allow-Headers",
 		"Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 
+	// Don't worry about OPTIONS in this lab project
 	// Stop here if its Preflighted OPTIONS request
 	// if req.Method == "OPTIONS" {
 	// 	return

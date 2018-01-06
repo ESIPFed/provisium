@@ -28,7 +28,8 @@ func NewProvEvent(docID, provFrag, remoteAddress, contentType string) error {
 	// Log the event
 	db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte("LogBucket"))
-		logEvent := fmt.Sprintf("%s, %s, %s", remoteAddress, time.Now().String(), contentType)
+		t := time.Now()
+		logEvent := fmt.Sprintf("%s, %s, %s", remoteAddress, t.Format(time.RFC3339), contentType)
 		err := b.Put([]byte(provID), []byte(logEvent))
 		return err
 	})
@@ -62,10 +63,7 @@ func NewProvEvent(docID, provFrag, remoteAddress, contentType string) error {
 
 //GetProvDetails Return the entry for a specific prov record
 func GetProvDetails(provID string) (string, string, error) {
-	// TODO..  get all the details about a prov event...
-	// TODO..  how to address some events bying type text/uri-list and others
-	// being something like turtle or other RDF encodings.
-	fmt.Printf("Request URI list entries for provID %s \n", provID)
+	fmt.Printf("Request content provID %s \n", provID)
 	db := getKVStoreRO()
 
 	var provEntry string
@@ -104,7 +102,7 @@ func GetProvDetails(provID string) (string, string, error) {
 }
 
 // GetProvLog gets all the logged events for a given docID
-func GetProvLog(docID string) map[string]string {
+func GetProvLog(docID string) (map[string]string, error) {
 	db := getKVStoreRO()
 
 	eventmap := make(map[string]string)
@@ -136,7 +134,7 @@ func GetProvLog(docID string) map[string]string {
 		log.Println(err)
 	}
 
-	return eventmap
+	return eventmap, err
 }
 
 // GetDocIDs get all the files in our holding
@@ -170,7 +168,7 @@ func GetDocIDs() []string {
 
 // GetResMetaData will get the metadata for a dataset
 func GetResMetaData(docID string) (string, error) {
-	fmt.Printf("I will get the info for docID %s \n", docID)
+	fmt.Printf("I will get the metadata for docID %s \n", docID)
 	db := getKVStoreRO()
 
 	var jsonld string
@@ -192,6 +190,32 @@ func GetResMetaData(docID string) (string, error) {
 	}
 
 	return jsonld, err
+}
+
+// GetResData will get the metadata for a dataset
+func GetResData(docID string) (string, error) {
+	fmt.Printf("I will get the data for docID %s \n", docID)
+	db := getKVStoreRO()
+
+	var datafile string
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("FileBucket"))
+		v := b.Get([]byte(docID))
+		datafile = string(v)
+		return nil
+	})
+
+	if err != nil {
+		log.Println("Error reading file info from the KV store index.db")
+	}
+
+	err = db.Close()
+	if err != nil {
+		log.Println("Error closing database index.db")
+		log.Println(err)
+	}
+
+	return datafile, err
 }
 
 func getKVStoreRW() *bolt.DB {

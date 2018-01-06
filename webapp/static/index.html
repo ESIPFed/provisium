@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.orange-deep_orange.min.css" />
   <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
 
-
   <!-- Wide card with share menu button -->
   <style>
     .homelink {
@@ -23,21 +22,21 @@
       color: #fff;
       height: 200px;
       background: url('./assets/more.png') no-repeat center center;
-            background-size: auto 100%;
+      background-size: auto 100%;
     }
 
     .demo-card-wide>.mdl-card__catalog {
       color: #fff;
       height: 200px;
       background: url('./assets/crate.png') no-repeat center center;
-            background-size: auto 100%;
+      background-size: auto 100%;
     }
 
     .demo-card-wide>.mdl-card__external {
       color: #fff;
       height: 200px;
       background: url('./assets/paperstack.png') no-repeat center center;
-            background-size: auto 100%;
+      background-size: auto 100%;
     }
 
     .demo-card-wide>.mdl-card__menu {
@@ -55,6 +54,63 @@
     }
   </style>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script type="application/ld+json">
+  {
+    "@context": {
+      "@vocab": "http://schema.org/",
+      "re3data": "http://example.org/re3data/0.1/"
+    },
+    "@type": "Organization",
+    "name": "Provisium",
+    "description": "An ESIP Labs project to explore an implementation of the W3C Note on PROV-AQ Access and Query",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "name": "Douglas Fils",
+      "email": "drfils@gmail.com",
+      "url": " https://orcid.org/0000-0002-2257-9127",
+      "contactType": "technical support"
+    },
+    "url": "http://www.provisium.io",
+    "funder": {
+      "@type": "Organization",
+      "name": "ESIP",
+      "url": "http://www.esipfed.org"
+    },
+    "potentialAction": [{
+        "@type": "ConsumeAction",
+        "target": {
+          "@type": "EntryPoint",
+          "url": "https://www.provisium.io/api/v1/prov/service",
+          "urlTemplate": "https://www.provisium.io/api/v1/prov/service/{uri}"
+        },
+        "query-input": {
+          "@type": "PropertyValueSpecification",
+          "description": "A URI of a data resource you wish to request the provenance of",
+          "valueRequired": true,
+          "valueName": "uri",
+          "valuePattern": "^[A-Za-z_][A-Za-z\d_]*$",
+          "minValue": 1
+        }
+      },
+      {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "contentType": "application/sparql-query",
+          "urlTemplate": "http://provisium.io/sparql?query={sparql_query}",
+          "description": "Provisium SPARQL Endpoint",
+          "httpMethod": ["GET", "POST"]
+        },
+        "query-input": {
+          "@type": "PropertyValueSpecification",
+          "valueRequired": true,
+          "valueName": "sparql_query"
+        }
+      }
+    ]
+  }             
+</script>
 
 </head>
 
@@ -160,7 +216,7 @@
                 </li>
 
                 <li>
-                  <a href="https://www.rd-alliance.org/groups/provenance-patterns-wg" target="_blank">RDA Provenance Patterns WG</a> 
+                  <a href="https://www.rd-alliance.org/groups/provenance-patterns-wg" target="_blank">RDA Provenance Patterns WG</a>
                 </li>
               </ul>
 

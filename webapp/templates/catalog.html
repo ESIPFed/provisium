@@ -22,7 +22,7 @@
     }
 
     .demo-card-wide>.mdl-card__title {
-      color: #fff;
+      color: rgb(252, 121, 61);
       height: 176px;
       background: url('/static/assets/document.png') no-repeat center center;
             background-size: auto 100%;
@@ -83,10 +83,10 @@
         <div class="mdl-cell mdl-cell--4-col">
           <div class="demo-card-wide mdl-card mdl-shadow--2dp">
             <div class="mdl-card__title">
-              <h2 class="mdl-card__title-text">Catalog entry {{.}}</h2>
+              <!-- <h2 class="mdl-card__title-text"></h2> -->
             </div>
             <div class="mdl-card__supporting-text">
-              This is a mock dataset with UUID {{.}}.  
+              This is a mock dataset with UUID<br> {{.}}.  
             </div>
             <div class="mdl-card__actions mdl-card--border">
               <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href=/id/dataset/{{.}}>
