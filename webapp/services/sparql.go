@@ -54,7 +54,7 @@ func GetProv(uri string) *sparql.Results {
 }
 
 func getSPARQL() (*sparql.Repo, error) {
-	repo, err := sparql.NewRepo("http://localhost:9999/blazegraph/namespace/prov/sparql",
+	repo, err := sparql.NewRepo("http://provisium.io/blazegraph/namespace/prov/sparql",
 		sparql.Timeout(time.Millisecond*15000),
 	)
 	if err != nil {

@@ -82,7 +82,7 @@
             </p>
             <ul>
                 <li class="github">
-                    <a rel="external" href="https://github.com/ESIPFed/provisium" title="Github">
+                    <a rel="external" target="_blank" href="https://github.com/ESIPFed/provisium" title="Github">
                         <svg class="fa-github">
                             <use xlink:href="#fa-github"></use>
                         </svg>
@@ -159,9 +159,9 @@
 
                             </span>
                             <h2>02. Locating</h2>
-                            <p>via HTTP with has_prov</p>
-                            <p>via query service found with has_query_services</p>
-                            <p>Headers with LINK (note 303 point)</p>
+                            <p>via HTTP with <code>#has_provenance</code></p>
+                            <p>via query service found with <code>#has_query_services</code></p>
+                            <p>Headers with LINK (note 303s require LINK in redirect target)</p>
                             <p>In HTML or RDF  (JSON-LD?)</p>
                         </li>
                         <li>
@@ -171,9 +171,8 @@
 
                             </span>
                             <h2>03. Query Service</h2>
-                            <p>Get description</p>
-                            <p>Inspect and setup call</p>
-                            <p>Process call</p>
+                            <p>Descriptor document  (OpenAPI, RDF, schema.org) <code>#ServiceDescriptor</code></p>
+                            <p>Direct RPC calls with URI templates and or SPARQL</p>
                         </li>
                         <li>
                             <div class="process step-4"></div>
@@ -182,9 +181,10 @@
 
                             </span>
                             <h2>04. Pingback</h2>
-                            <ul>
-                                <li>Detail out the pingback process</li>
-                            </ul>
+                            <p>A process to expose much of the other elements in this set while
+                                adding in <code>#has_provenance</code>  <code>#pingback</code> and
+                                <code>#has_query_service</code>
+                            </p>
                         </li>
                     </ul>
                 </div>
@@ -199,7 +199,7 @@
                                     <img src="../static/images/provactivities.png" alt="Activities">
                                 </figure>
                                 <blockquote>
-                                    <p>Activities explored under the lab project
+                                    <p> Elements of Implementation 
                                     </p>
                                     
                                 </blockquote>
@@ -209,7 +209,29 @@
                     <!-- .end .wrap -->
                 </section>
 
-
+                <section>
+                        <div class="wrap">
+                            <div class="card-60">
+                                    <figure>
+                                        <img src="../static/images/provisium.png" alt="provisium">
+                                        <img src="../static/images/provohash.png" alt="provohash">
+                                    </figure>
+                                    <blockquote>
+                                        <p>A bit of a walk through for 
+                                            <ul>
+                                                <li>
+                                                        <a target="_blank" href="http://provisium.io">provisium.io</a>
+                                                </li>
+                                                <li>
+                                                        <a target="_blank" href="http://provohash.xyz">provohash.xyz</a>
+                                                </li>
+                                            </ul>
+                                        </p>
+                                    </blockquote>
+                            </div>
+                        </div>
+                        <!-- .end .wrap -->
+                    </section>
 
             <section>
                     <!--.wrap = container (width: 90%) -->
@@ -250,29 +272,7 @@ http://coyote.example.org/another/provenance
                     <!-- .end .wrap -->
                 </section>
 
-            <section>
-                <div class="wrap">
-                    <div class="card-60">
-                            <figure>
-                                <img src="../static/images/provisium.png" alt="provisium">
-                                <img src="../static/images/provohash.png" alt="provohash">
-                            </figure>
-                            <blockquote>
-                                <p>A bit of a walk through for 
-                                    <ul>
-                                        <li>
-                                                <a target="_blank" href="http://provisium.io">provisium.io</a>
-                                        </li>
-                                        <li>
-                                                <a target="_blank" href="http://provohash.xyz">provohash.xyz</a>
-                                        </li>
-                                    </ul>
-                                </p>
-                            </blockquote>
-                    </div>
-                </div>
-                <!-- .end .wrap -->
-            </section>
+         
 
 
             <section>
@@ -282,7 +282,13 @@ http://coyote.example.org/another/provenance
                         <div class="column">
                             <h3 class="text-context">
                                 In Conclusion</h3>
+                                <p>
+                                        Anything one ... can imagine, other[s] ... can make real.
+                                   <br/>     ― Jules Verne, Around the World in Eighty Days
+                                </p>
                             <p>
+                                    <img style="width:250px" src="../static/images/80-days.jpg" alt="Activities">
+
                             </p>
                         </div>
                         <!-- end .column -->
