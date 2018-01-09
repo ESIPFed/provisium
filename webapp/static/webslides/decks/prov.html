@@ -16,7 +16,7 @@
       -->
 
     <!-- SEO -->
-    <title>EarthCube CDF Registry Working Group</title>
+    <title>ESIP Lab Provisium</title>
     <meta name="description" content="WebSlides is the easiest way to create HTML presentations and landings. 120+ free slides ready to use.">
 
     <!-- URL CANONICAL -->
@@ -78,15 +78,15 @@
     <header role="banner">
         <nav role="navigation">
             <p class="logo">
-                <a href="../index.html" title="CDFRWG">CDFRWG</a>
+                <a href="/static/webslides/decks/prov.html#slide=1" title="ESIP Lab Provisium">ESIP Lab Provisium</a>
             </p>
             <ul>
                 <li class="github">
-                    <a rel="external" href="https://github.com/fils/CDFRegistryWG" title="Github">
+                    <a rel="external" href="https://github.com/ESIPFed/provisium" title="Github">
                         <svg class="fa-github">
                             <use xlink:href="#fa-github"></use>
                         </svg>
-                        <em>CDFRWG</em>
+                        <em>ESIP Lab Provisium</em>
                     </a>
                 </li>
                 <!-- <li class="twitter">
@@ -112,17 +112,17 @@
         -->
 
             <section class="bg-purple aligncenter">
-                <span class="background dark" style="background-image:url('../static/images/earthcube.png')"></span>
+                <span class="background dark" style="background-image:url('../static/images/ESIP-logo.jpg')"></span>
                 <!--.wrap = container (width: 90%) -->
                 <div class="wrap">
-                    <h1 class="text-landing">EarthCube CDF </h1>
-                    <h1>Registry Working Group</h1>
+                    <h1 class="text-landing">ESIP Lab </h1>
+                    <h1>Provisium</h1>
                     <p class="text-symbols">* * * </p>
                     <p>
-                        <a class="button ghost" href="https://github.com/fils/CDFRegistryWG" title="EarthCube CDF RWG">
+                        <a class="button ghost" href="https://github.com/ESIPFed/provisium" title="ESIP Lab Provisium">
                             <svg class="fa-github">
                                 <use xlink:href="#fa-github"></use>
-                            </svg> EarthCube CDF RWG</a>
+                            </svg> ESIP Lab Provisium</a>
                     </p>
                 </div>
                 <!-- .end .wrap -->
@@ -130,8 +130,9 @@
             <section>
                 <!--.wrap = container (width: 90%) -->
                 <div class="wrap aligncenter">
-                    <p class="text-subtitle">The web is the architecture</p>
-                    <h2>Using web architecture patterns to publish and consume facility metadata</h2>
+                    <p class="text-subtitle">Implementing W3 PROV AQ Note</p>
+                    <h2>This work is an attempt to implement aspects of the W3C Provenance Access and Query Note</h2>
+                <a target="_blank" href="https://www.w3.org/TR/prov-aq/">https://www.w3.org/TR/prov-aq/</a>
                 </div>
                 <!-- .end .wrap -->
             </section>
@@ -139,52 +140,50 @@
 
             <section>
                 <div class="wrap">
-                    <h3>Elements of the RWG activities</h3>
+                    <h3>Elements of the Prov AQ Note</h3>
                     <ul class="flexblock steps">
                         <!-- li>a? Add blink = <ul class="flexblock steps blink">-->
                         <li>
                             <span>
-                                <svg class="fa-file-code-o">
-                                    <use xlink:href="#fa-file-code-o"></use>
-                                </svg>
+                                    <img style="width:100px" src="../static/images/access.png" alt="Activities">
+
                             </span>
-                            <h2>01. Vocabulary work</h2>
-                            <p>Working with CDF members and RE3 ata</p>
+                            <h2>01. Accessing</h2>
+                            <p>Directly via a provenance resource location</p>
+                            <p>Indirectly via query services</p>
                         </li>
                         <li>
                             <div class="process step-2"></div>
                             <span>
-                                <svg class="fa-bullhorn">
-                                    <use xlink:href="#fa-bullhorn"></use>
-                                </svg>
+                                    <img style="width:100px" src="../static/images/locating.png" alt="Activities">
+
                             </span>
-                            <h2>02. Publishing patterns</h2>
-                            <p>Using web architecture to publish and consume</p>
+                            <h2>02. Locating</h2>
+                            <p>via HTTP with has_prov</p>
+                            <p>via query service found with has_query_services</p>
+                            <p>Headers with LINK (note 303 point)</p>
+                            <p>In HTML or RDF  (JSON-LD?)</p>
                         </li>
                         <li>
                             <div class="process step-3"></div>
                             <span>
-                                <svg class="fa-terminal">
-                                    <use xlink:href="#fa-terminal"></use>
-                                </svg>
+                                    <img style="width:100px" src="../static/images/query.png" alt="Activities">
+
                             </span>
-                            <h2>03. Harvesting and Search testing</h2>
-                            <p>Web architecture and JSON-LD framing API for harvesting.  Indexing
-                                against resulting data models. 
-                            </p>
+                            <h2>03. Query Service</h2>
+                            <p>Get description</p>
+                            <p>Inspect and setup call</p>
+                            <p>Process call</p>
                         </li>
                         <li>
                             <div class="process step-4"></div>
                             <span>
-                                <svg class="fa-cog">
-                                    <use xlink:href="#fa-cog"></use>
-                                </svg>
+                                    <img style="width:100px" src="../static/images/pingback.png" alt="Activities">
+
                             </span>
-                            <h2>04. Process future</h2>
+                            <h2>04. Pingback</h2>
                             <ul>
-                                <li>Extend to data</li>
-                                <li>Connect with community</li>
-                                <li>ESSO Project 418</li>
+                                <li>Detail out the pingback process</li>
                             </ul>
                         </li>
                     </ul>
@@ -195,14 +194,12 @@
             <section>
                     <div class="wrap">
                         <div class="card-60">
-                            <a href="https://en.wikipedia.org/wiki/Leonardo_da_Vinci" title="Leonardo da Vinci - Wikipedia">
+                            <a href="https://github.com/ESIPFed/provisium/tree/master/final_report" title="Activities">
                                 <figure>
-                                    <img src="../static/images/rwgvoc.png" alt="Leonardo da Vinci">
+                                    <img src="../static/images/provactivities.png" alt="Activities">
                                 </figure>
                                 <blockquote>
-                                    <p>Vocabulary work to extend RE3 terms to address CDF needs and 
-                                        convert RE3 XML schema to format compatible with schema.org 
-                                        usage patterns
+                                    <p>Activities explored under the lab project
                                     </p>
                                     
                                 </blockquote>
@@ -218,38 +215,35 @@
                     <!--.wrap = container (width: 90%) -->
                     <div class="wrap">
                         <div class="grid vertical-align">
+
                             <div class="column">
+
                                 <h3>
-                                    <strong>HTML 5 microdata</strong>
+                                    <strong>Example Calls</strong>
                                 </h3>
-                                <p class="text-intro">The
-                                    <br/>
-                                    <small> 
-                                    <code>&lt;script type="application/ld+json"&gt;</code>
-                                </small>
-                                    <br/> in the DOM head element is a semantic fragment </p>
-                                <p>Content is schema.org with the option for external 
-                                    vocabularies.  Fully accessible via web architecture patterns.
+                                <p class="text-intro"> Curl like call examples </p>
+                                <p>These calls are done using a VS Code plugin 
+                                    but could be done via curl as well.  
                                     
                                 </p>
                             </div>
                             <!-- .end .column -->
+
                             <div class="column">
+                                    <a target="_blank" href="https://github.com/ESIPFed/provisium/blob/master/serviceCalls.har" title="calls">
+
                                 <pre>
-{
-    "@context": {
-        "@vocab": "http://schema.org/",
-        "re3data": "http://example.org/re3data/0.1/"
-    },
-    "@type": "Organization",
-    "@id": "http://opencoredata.org/id/facilityinfo",
-    "name": "Open Core Data",
-    "re3data:datalicense": "http://opencoredata.org/datapolicy.html",
-    "re3data:keyword": "geochemistry, paleontology, geophysics, geoscience, scientific drilling, ocean drilling, continental drilling, paleomagnetism",
-   ...
+POST http://127.0.0.1:9900/doc/dataset/bcd15975-680c-47db-a062-ac0bb6e66816/pingback HTTP/1.1
+content-type: text/uri-list
+                                        
+http://coyote.example.org/contraption/provenance
+http://coyote.example.org/another/provenance
         </pre>
+    </a>
+
                             </div>
                             <!-- .end .column -->
+
                         </div>
                         <!-- .end .grid -->
                     </div>
@@ -259,42 +253,26 @@
             <section>
                 <div class="wrap">
                     <div class="card-60">
-                        <a href="https://en.wikipedia.org/wiki/Leonardo_da_Vinci" title="Leonardo da Vinci - Wikipedia">
                             <figure>
-                                <img src="../static/images/rwgharvesting.png" alt="Leonardo da Vinci">
+                                <img src="../static/images/provisium.png" alt="provisium">
+                                <img src="../static/images/provohash.png" alt="provohash">
                             </figure>
                             <blockquote>
-                                <p>Example harvesting approaches using web architecture practices and 
-                                    JSON-LD.
+                                <p>A bit of a walk through for 
+                                    <ul>
+                                        <li>
+                                                <a target="_blank" href="http://provisium.io">provisium.io</a>
+                                        </li>
+                                        <li>
+                                                <a target="_blank" href="http://provohash.xyz">provohash.xyz</a>
+                                        </li>
+                                    </ul>
                                 </p>
                             </blockquote>
-                        </a>
                     </div>
                 </div>
                 <!-- .end .wrap -->
             </section>
-
-
-
-
-            <section>
-                <div class="wrap">
-                    <div class="card-60">
-                        <a href="https://en.wikipedia.org/wiki/Leonardo_da_Vinci" title="Leonardo da Vinci - Wikipedia">
-                            <figure>
-                                <img src="../static/images/rwgoverview.png" alt="Leonardo da Vinci">
-                            </figure>
-                            <blockquote>
-                                <p>Reference search implementation to assist workflow
-                                </p>
-                            </blockquote>
-                        </a>
-                    </div>
-                </div>
-                <!-- .end .wrap -->
-            </section>
-
-
 
 
             <section>
@@ -304,33 +282,29 @@
                         <div class="column">
                             <h3 class="text-context">
                                 In Conclusion</h3>
-                            <p>EarthCube CDF RWG is working on patterns for the self hosting and publishing 
-                                of semantic facility metadata.
-                                
+                            <p>
                             </p>
                         </div>
                         <!-- end .column -->
                         <div class="column">
-                            <h6>Self Hosted</h6>
-                            <p>Facilities can self host and manage locally their semantic metadata.  Any number
-                                of consumers can then harvest and value add to that.
+                            <h6>Nice Note</h6>
+                            <p>A well done note....  it was a fun exercise to build out an 
+                                implementation of it.
                             </p>
                            
                                 <p class="text-symbols">* * *</p>
 
-                            <h6>Web Architecture</h6>
-                            <p> Both the publishing and consumption of the semantic metadata follows established
-                                web architecture approaches </p>
+                            <h6>schema.org</h6>
+                            <p> The pattern and recommendations seems to mesh well with some of the emerging
+                                schema.org paterns.  Are we (might we be) overloading that pattern though? </p>
                         </div>
                         <!-- end .column -->
                         <div class="column">
-                            <h6>Adaptable Pattern</h6>
-                            <p> The pattern is scalable and adaptable to a range of applications, such as data.  </p>
+                            <h6>Lends itself to a service model</h6>
+                            <p> The pattern does work with "prov as a service" implementation as well </p>
                             <p class="text-symbols">* * *</p>
 
-                            <h6>Future work</h6>
-                            <p> ESSO has funded work into exploring extension of this pattern to data sets.  Google
-                                is also pursuing this pattern.    </p>
+                            
                         </div>
                         <!-- end .column -->
                     </div>
