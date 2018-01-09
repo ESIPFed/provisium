@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"lab.esipfed.org/provohash/kv"
+	"lab.esipfed.org/provisium/provohash/kv"
 )
 
 // CatalogListing displays the catalog of files....

@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"lab.esipfed.org/provohash/kv"
+	"lab.esipfed.org/provisium/provohash/kv"
 )
 
 // ProvItem will get the prov by hash

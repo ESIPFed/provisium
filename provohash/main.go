@@ -5,10 +5,10 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	dx "lab.esipfed.org/provohash/dx"
-	handlers "lab.esipfed.org/provohash/handlers"
-	kv "lab.esipfed.org/provohash/kv"
-	"lab.esipfed.org/provohash/services"
+	dx "lab.esipfed.org/provisium/provohash/dx"
+	handlers "lab.esipfed.org/provisium/provohash/handlers"
+	kv "lab.esipfed.org/provisium/provohash/kv"
+	"lab.esipfed.org/provisium/provohash/services"
 )
 
 // MyServer struct for mux router

@@ -10,7 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/knakk/rdf"
-	"lab.esipfed.org/provohash/kv"
+	"lab.esipfed.org/provisium/provohash/kv"
 )
 
 // PostProv takes a POST call to put in the prov with
