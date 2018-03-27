@@ -1,7 +1,9 @@
-# Provisium
+http://provisium.io/webslides/static/images/provactivities.png# Provisium
 
 ## PROV-AQ 
 - https://www.w3.org/TR/prov-aq/
+
+![provenance activities][provact]
 
 
 ## Landing Page Implications
@@ -249,7 +251,12 @@ content-type: text/uri-list
 coyote.example.org//contraption&provenance/
 ```
 
-## Future work on this package
+## Review and Future work on this package
+
+![provenance activities][provact]
+
+[provact]:provactivities.png "Logo Title Text 2"
+
 
 * provisium.io hosted fake datasets to *prime the pump*.  With the existence of the http://geodex.org/data/catalog and the http://opencoredata.org/catalog/geolink there are examples of both schema.org and header patterns.  The fake data should be removed.  *remove the mock data from provisium.io*
 * The separate provohash and provisium sites are confusing.  The single provisium.io domain can address both hosting prov and providing the services around it.  There is not need to host datasets as this pattern attempts to promote the idea that facilities host the data but outsource the prov elements.  *remove the data and combine the functions of the two domains into provisium.io*

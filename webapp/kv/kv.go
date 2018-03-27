@@ -80,7 +80,7 @@ func GetProvDetails(provID string) (string, string, error) {
 		if len(logLine) == 3 {
 			contentType = logLine[2]
 		} else {
-			contentType = "text/plain"
+			contentType = "text/plain" // ??
 		}
 
 		log.Println(logLine)
@@ -218,6 +218,33 @@ func GetResData(docID string) (string, error) {
 	return datafile, err
 }
 
+// SetResDataByRef take a URI reference and enters that as a
+// resources in the system.
+func SetResDataByRef(ref string) (string, error) {
+	fmt.Printf("I will set the data for reference %s \n", ref)
+	db := getKVStoreRW()
+
+	docID := uuid.New().String()
+
+	err := db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("RefBucket"))
+		err := b.Put([]byte(docID), []byte(ref))
+		return err
+	})
+
+	if err != nil {
+		log.Println("Error writing reference info from the KV store index.db Filebucket")
+	}
+
+	err = db.Close()
+	if err != nil {
+		log.Println("Error closing database index.db")
+		log.Println(err)
+	}
+
+	return docID, err
+}
+
 func getKVStoreRW() *bolt.DB {
 	db, err := bolt.Open("./kvStores/index.db", 0666, nil)
 	if err != nil {
@@ -245,6 +272,14 @@ func InitKV() error {
 	db := getKVStoreRW()
 
 	err := db.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte("RefBucket"))
+		if err != nil {
+			return fmt.Errorf("create bucket: %s", err)
+		}
+		return nil
+	})
+
+	err = db.Update(func(tx *bolt.Tx) error {
 		_, err := tx.CreateBucketIfNotExists([]byte("FileBucket"))
 		if err != nil {
 			return fmt.Errorf("create bucket: %s", err)
