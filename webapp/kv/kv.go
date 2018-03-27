@@ -152,6 +152,8 @@ func GetDocIDs() []string {
 		return nil
 	})
 
+	// TODO..  add in doing this for external resources too
+
 	if err != nil {
 		log.Println("Error reading file info from the KV store index.db")
 		log.Println(err)

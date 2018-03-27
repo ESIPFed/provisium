@@ -1,7 +1,12 @@
 http://provisium.io/webslides/static/images/provactivities.png# Provisium
 
 ## PROV-AQ 
+
 - https://www.w3.org/TR/prov-aq/
+
+Provisium is not a production system not a recommendation for one.  It is simply
+an attempt to present an implementation of the W3C Note on PROV-AQ and to assess 
+points of implementation and value add aspects.  
 
 ![provenance activities][provact]
 
@@ -262,6 +267,5 @@ coyote.example.org//contraption&provenance/
 * The separate provohash and provisium sites are confusing.  The single provisium.io domain can address both hosting prov and providing the services around it.  There is not need to host datasets as this pattern attempts to promote the idea that facilities host the data but outsource the prov elements.  *remove the data and combine the functions of the two domains into provisium.io*
 * The service query and sparql are not implemented in manners that can be exposed well
 * There is no *roll up* or aggregate and validate function at provisium.io to address the pass by reference pattern
-
-
+* Connect this into some of the P418 concepts and flows
 
