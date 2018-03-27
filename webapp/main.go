@@ -19,6 +19,11 @@ type MyServer struct {
 // Our main is really just router.  It adds in a few default header elements and fires up  the listener.
 func main() {
 	// DX router (implements our LODish 303 pattern which should be demonstrated here to ensure alignment)
+	// Catalog router
+	catalog := mux.NewRouter()
+	catalog.HandleFunc("/catalog/listing", handlers.CatalogListing) // PROV: test cast with Void..  would need to generalize
+	http.Handle("/catalog/", catalog)
+
 	// TODO: All three patterns go to the same function..  make this one regex match
 	dxroute := mux.NewRouter()
 	dxroute.HandleFunc("/id/dataset/{ID}", dx.Redirection)            // id -> doc 303 redirection
@@ -29,15 +34,9 @@ func main() {
 	// Data and prov router (LODish)
 	dataset := mux.NewRouter()
 	dataset.HandleFunc("/doc/dataset/{ID}", handlers.RenderLP)              // PROV: test cast with Void..  would need to generalize
-	dataset.HandleFunc("/doc/dataset/{ID}/provenance", handlers.RenderProv) //should give same responce as prov service in API
+	dataset.HandleFunc("/doc/dataset/{ID}/provenance", handlers.RenderProv) // should give same responce as prov service in API
 	dataset.HandleFunc("/doc/dataset/{ID}/pingback", handlers.ProvPingback) // PROV: pingback for this resource  (would prefer a master /prov or server)
-
 	http.Handle("/doc/", dataset)
-
-	// Catalog router
-	catalog := mux.NewRouter()
-	catalog.HandleFunc("/catalog/listing", handlers.CatalogListing) // PROV: test cast with Void..  would need to generalize
-	http.Handle("/catalog/", catalog)
 
 	// Services router:  Section 4.2 https://www.w3.org/TR/2013/NOTE-prov-aq-20130430/#direct-http-query-service-invocation
 	sr := mux.NewRouter()
