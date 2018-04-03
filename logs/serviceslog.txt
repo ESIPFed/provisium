@@ -1,0 +1,20 @@
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-03T16:34:50-05:00"}
+{"level":"info","msg":"Search Term:  \n","time":"2018-04-03T16:35:23-05:00"}
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-03T16:53:21-05:00"}
+{"level":"info","msg":"Search Term:  \n","time":"2018-04-03T16:54:01-05:00"}
+{"level":"info","msg":"","time":"2018-04-03T16:54:01-05:00"}
+{"level":"info","msg":"Search Term:  \n","time":"2018-04-03T16:54:14-05:00"}
+{"level":"info","msg":"","time":"2018-04-03T16:54:14-05:00"}
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-03T16:54:45-05:00"}
+{"level":"info","msg":"Search Term:  \n","time":"2018-04-03T16:54:51-05:00"}
+{"level":"info","msg":"","time":"2018-04-03T16:54:51-05:00"}
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-03T16:55:26-05:00"}
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-03T16:56:31-05:00"}
+{"level":"info","msg":"URI list: ","time":"2018-04-03T16:56:37-05:00"}
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-03T16:58:44-05:00"}
+{"level":"info","msg":"URI list: http://coyote.example.org/contraption/provenance\nhttp://coyote.example.org/another/provenance","time":"2018-04-03T16:58:49-05:00"}
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-03T17:02:54-05:00"}
+{"level":"info","msg":"Header Link: ","time":"2018-04-03T17:03:01-05:00"}
+{"level":"info","msg":"Content Length: 93","time":"2018-04-03T17:03:01-05:00"}
+{"level":"info","msg":"Body Length: 93","time":"2018-04-03T17:03:01-05:00"}
+{"level":"info","msg":"URI list: http://coyote.example.org/contraption/provenance\nhttp://coyote.example.org/another/provenance","time":"2018-04-03T17:03:01-05:00"}
