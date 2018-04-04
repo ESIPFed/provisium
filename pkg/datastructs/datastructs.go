@@ -1,5 +1,11 @@
 package datastructs
 
+import (
+	"encoding/json"
+
+	"lab.esipfed.org/provisium/pkg/kv"
+)
+
 type PingBack struct {
 	ID       string // UUID for the event
 	Mimetype string
@@ -9,11 +15,10 @@ type PingBack struct {
 }
 
 type ProvObject struct {
-	Hash      string // sha1 string
-	Body      string // should be a valid RDF document
-	Mimetype  string // needed?   could note seriealization
-	EventInfo string
-	Date      string
+	Hash     string // sha1 string  This is the ID for objects
+	Body     string // should be a valid RDF document
+	Mimetype string // needed?   could note seriealization
+	Date     string
 }
 
 func (pb *PingBack) exists() (bool, error) {

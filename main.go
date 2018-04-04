@@ -31,7 +31,7 @@ func main() {
 	log.SetOutput(f)
 
 	// set up the KV store
-	err := kv.InitKV()
+	err = kv.InitKV()
 	if err != nil {
 		log.Fatal(err) // fatal..  no bucket..  no reason
 	}

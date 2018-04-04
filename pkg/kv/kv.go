@@ -10,6 +10,11 @@ import (
 	"github.com/google/uuid"
 )
 
+func StorePB(ID string, buf []byte) error {
+
+	return nil
+}
+
 // NewProvEvent must address a range of actions.  On a new event
 // we need to record the CLF of the event, the prov graph fragment
 // and associate the new prov event ID with the document ID
@@ -246,6 +251,8 @@ func SetResDataByRef(ref string) (string, error) {
 
 	return docID, err
 }
+
+// Util functions for KV operations below here
 
 func getKVStoreRW() *bolt.DB {
 	db, err := bolt.Open("./dataVolume/kvStores/index.db", 0666, nil)

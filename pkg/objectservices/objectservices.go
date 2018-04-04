@@ -21,7 +21,7 @@ func New() *restful.WebService {
 	// - get prov by HASH
 	// - get prov entries  (start, step)
 	// - query .. return results from object store only..  not pingback
-	// - delete ?  or perhaps not...  (set a invalid flag)
+	// - delete ?  or perhaps not...  (set a deprecated flag?)
 
 	// add in start point and length cursors
 	service.Route(service.POST("/post").To(PostObject).
@@ -35,7 +35,7 @@ func New() *restful.WebService {
 	return service
 }
 
-// PingBack First test function..   opens each time..  not what we want..
+// PostObject First test function..   opens each time..  not what we want..
 // need to open indexes and maintain state
 func PostObject(request *restful.Request, response *restful.Response) {
 	// read the body..   if trouble..   get out
