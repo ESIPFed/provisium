@@ -18,3 +18,5 @@
 {"level":"info","msg":"Content Length: 93","time":"2018-04-03T17:03:01-05:00"}
 {"level":"info","msg":"Body Length: 93","time":"2018-04-03T17:03:01-05:00"}
 {"level":"info","msg":"URI list: http://coyote.example.org/contraption/provenance\nhttp://coyote.example.org/another/provenance","time":"2018-04-03T17:03:01-05:00"}
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-04T05:04:22-05:00"}
+{"level":"info","msg":"Services on localhost:6789","time":"2018-04-04T05:08:02-05:00"}

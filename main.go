@@ -5,6 +5,7 @@ import (
 	"os"
 
 	log "github.com/sirupsen/logrus"
+	"lab.esipfed.org/provisium/pkg/kv"
 	"lab.esipfed.org/provisium/pkg/objectservices"
 	"lab.esipfed.org/provisium/pkg/pingback"
 	"lab.esipfed.org/provisium/pkg/query"
@@ -28,6 +29,12 @@ func main() {
 	}
 	defer f.Close()
 	log.SetOutput(f)
+
+	// set up the KV store
+	err := kv.InitKV()
+	if err != nil {
+		log.Fatal(err) // fatal..  no bucket..  no reason
+	}
 
 	wsContainer := restful.NewContainer()
 

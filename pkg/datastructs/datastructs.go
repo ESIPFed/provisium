@@ -5,12 +5,15 @@ type PingBack struct {
 	Mimetype string
 	Hash     string
 	Body     string
+	Date     string
 }
 
 type ProvObject struct {
-	Hash     string // sha1 string
-	Body     string // should be a valid RDF document
-	Mimetype string // needed?   could note seriealization
+	Hash      string // sha1 string
+	Body      string // should be a valid RDF document
+	Mimetype  string // needed?   could note seriealization
+	EventInfo string
+	Date      string
 }
 
 func (pb *PingBack) exists() (bool, error) {
