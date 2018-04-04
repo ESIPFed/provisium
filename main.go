@@ -5,7 +5,9 @@ import (
 	"os"
 
 	log "github.com/sirupsen/logrus"
+	"lab.esipfed.org/provisium/pkg/objectservices"
 	"lab.esipfed.org/provisium/pkg/pingback"
+	"lab.esipfed.org/provisium/pkg/query"
 
 	restful "github.com/emicklei/go-restful"
 	swagger "github.com/emicklei/go-restful-swagger12"
@@ -41,7 +43,9 @@ func main() {
 	wsContainer.Filter(wsContainer.OPTIONSFilter)
 
 	// Add the services
-	wsContainer.Add(pingback.New()) // text search services
+	wsContainer.Add(pingback.New())       // text search services
+	wsContainer.Add(query.New())          // text search services
+	wsContainer.Add(objectservices.New()) // text search services
 
 	// Swagger
 	config := swagger.Config{
