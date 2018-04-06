@@ -1,0 +1,37 @@
+{
+  "@context": {
+    "@vocab": "http://schema.org/",
+    "re3data": "http://example.org/re3data/0.1/"
+  },
+  "@id": "http://provisium.io/id/dataset/beed48e6-bb3e-11e7-abc4-cec278b6b50a",
+  "@type": "Dataset",
+  "description": "Data set description",
+  "distribution": {
+    "@type": "DataDownload",
+    "contentUrl": "http://provisium.io/id/dataset/beed48e6-bb3e-11e7-abc4-cec278b6b50a"
+  },
+  "keywords": "ESIP",
+  "fileFormat" : "application/vnd.dataresource+json",
+"identifier": {
+ "@type": "PropertyValue",
+   "propertyID": "UUID",
+   "value":  "beed48e6-bb3e-11e7-abc4-cec278b6b50a"
+   },
+  "name": "data3.csv",
+  "publisher": {
+    "@type": "Organization",
+    "description": "This is a mock data set published by ESIP labs for testing provenance work.",
+    "name": "ESIP Federation",
+    "url": "http://esipfed.org"
+  },
+  "spatial": {
+    "@type": "Place",
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "-27.19",
+      "longitude": "1.58"
+    }
+  },
+  "url": "http://provisium.io/id/dataset/beed48e6-bb3e-11e7-abc4-cec278b6b50a",
+  "variableMeasured": "Mock measurement"
+}

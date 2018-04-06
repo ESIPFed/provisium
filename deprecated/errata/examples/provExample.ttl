@@ -1,0 +1,44 @@
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+<http://provisium.io/id/dataset/bcd15975-680c-47db-a062-ac0bb6e66816>
+  a prov:entity ;
+  prov:qualifiedAttribution _:genid1 ;
+  prov:wasAttributedTo _:genid1 .
+
+<http://esipfed.org/org>
+  rdf:label "ESIP Lab" ;
+  a prov:Agent, prov:org .
+
+_:genid1
+  a prov:attribution ;
+  prov:agent <http://esipfed.org/org> ;
+  prov:hadRole <http://www.aurole.org/Publisher> .
+
+<http://provisium.io/id/dataset/22483860-bb3f-11e7-abc4-cec278b6b50a>
+  a prov:entity ;
+  prov:qualifiedAttribution _:genid2 ;
+  prov:wasAttributedTo _:genid2 .
+
+<http://esipfed.org/org>
+  rdf:label "ESIP Lab" ;
+  a prov:Agent, prov:org .
+
+_:genid2
+  a prov:attribution ;
+  prov:agent <http://esipfed.org/org> ;
+  prov:hadRole <http://www.aurole.org/Publisher> .
+
+<http://provisium.io/id/dataset/beed48e6-bb3e-11e7-abc4-cec278b6b50a>
+  a prov:entity ;
+  prov:qualifiedAttribution _:genid3 ;
+  prov:wasAttributedTo _:genid3 .
+
+<http://esipfed.org/org>
+  rdf:label "ESIP Lab" ;
+  a prov:Agent, prov:org .
+
+_:genid3
+  a prov:attribution ;
+  prov:agent <http://esipfed.org/org> ;
+  prov:hadRole <http://www.aurole.org/Publisher> .
