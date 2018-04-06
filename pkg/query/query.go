@@ -23,6 +23,13 @@ func New() *restful.WebService {
 		ReturnsError(400, "Unable to handle request", nil).
 		Operation("PBSearch"))
 
+	// add in start point and length cursors
+	service.Route(service.GET("/searchv2").To(PBSearchv2).
+		Doc("Simple search service").
+		Param(service.QueryParameter("q", "query string")).
+		ReturnsError(400, "Unable to handle request", nil).
+		Operation("PBSearchv2"))
+
 	return service
 }
 
@@ -31,4 +38,9 @@ func New() *restful.WebService {
 func PBSearch(request *restful.Request, response *restful.Response) {
 
 	response.Write([]byte("Got it"))
+}
+
+func PBSearchv2(request *restful.Request, response *restful.Response) {
+
+	response.Write([]byte("Now in version 2"))
 }
