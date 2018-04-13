@@ -15,7 +15,6 @@ import (
 )
 
 func init() {
-
 	log.SetFormatter(&log.JSONFormatter{}) // Log as JSON instead of the default ASCII formatter.
 	log.SetOutput(os.Stdout)               // I override this and set output to file (io.Writer) in main
 	log.SetLevel(log.DebugLevel)           // Will log anything that is info or above (debug, info, warn, error, fatal, panic). Default.
