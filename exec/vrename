@@ -1,0 +1,42 @@
+#!/bin/bash
+#
+# Virtuoso			Graph Rename Script for Virtuoso OSE
+#
+# Author: Eric Rozell (http://www.cs.rpi.edu/~rozele, rozele@rpi.edu)
+# Version: 1.0
+# Date: Nov 8, 2011
+# Description: Bash script to rename a named graph in Virtuoso
+# Usage: vdelete [old_graph_uri] [new_graph_uri]
+
+# Get input arguments
+args=("$@")
+
+if [ ! -d "/tmp/vad/" ]; then
+    mkdir /tmp/vad
+fi
+
+if [ $# -ne 2 ]; then
+	echo "Wrong number of arguments. Correct usage: \"vdelete [old_graph_uri] [new_graph_uri]\""
+else
+	# Get graph_uri
+	old_graph_uri=${args[0]}
+	new_graph_uri=${args[1]}
+
+	# Status message
+        echo "Renaming graph <$old_graph_uri> to <$new_graph_uri>, please wait..."
+	
+	# Log into Virtuoso isql env
+	isql_cmd="/opt/virtuoso-6.1.4/bin/isql 1111 dba"
+	isql_pwd="dba"  # default admin password, may need to change
+	
+	# Call SPARQL CLEAR to delete named graphs
+	graph_rename="update DB.DBA.RDF_QUAD set g = iri_to_id ('$new_graph_uri') where g = iri_to_id ('$old_graph_uri', 0);"
+	${isql_cmd} ${isql_pwd} << EOF &> /tmp/vad/vrename.log
+		$graph_rename
+		checkpoint;
+		exit;
+EOF
+
+	# Status message
+	echo "Renaming finished! Check /tmp/vad/vrename.log for details."
+fi
