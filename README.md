@@ -1,126 +1,100 @@
-### Provisium
+# Provisium (THROUGHPUT revision)
 
-#### About
+## Update
+This a fork of the Provisium code started under 
+ESIP (https://github.com/ESIPFed/provisium).  It is 
+dramatically different to apply lessons learned.  It has
+been updated as part of EarthCube THROUGHPUT.
 
-A project to develop a server and standalone client that
-demonstrates the various approaches to PROV and PROV-AQ as described in the W3C
-Working Group specifications (https://www.w3.org/TR/prov-aq/). 
-Provisium will demonstrate simple reference
-implementations of these approaches . The reference
-implementations will:
+The plan will be to merge these changes back into the ESIP 
+version to synchronize the two code bases back into one.  
 
-1) serve as a working examples (with open source code) of
-how end-to-end provenance systems could be constructed and 
-2) provide a basis
-to compare and contrast practical implementations.  
+The search and a few things like a resource display need to 
+be implemented still.  All the plumbing is there though, just need 
+time to flesh out some templates and structures.  
 
-As part of this work, a generic visualization service will be created following
-W3C web component guidelines (https://www.w3.org/wiki/WebComponents/). Web
-components allow web page authors to import a web visualization, including all
-dependencies and networking code, with a few simple import statements.  This
-embedding works across domains as well and provides additional reuse options as
-the visualization service can easily be integrated inside of dataset landing
-and other pages.
+## Running
+Provisium has two run time dependencies.  These can be launched
+via a Docker compose file locate in deployments. Later this package 
+will build to a docker file and one compose file will bring up the 
+entire service.     
 
+The package currently builds to a docker container now.   We need 
+to push that out and modify the compose file to reflect that.  
 
-#### Resources
-Some resources for those interested in web architecture based PROV.
+You also need to set three environment variables for this code.
+You can use something like the script setenvs.sh in the scripts
+directory to do this.  These are the settings for the Minio 
+system and the location of your SPARQL endpoint.  
 
-1) https://www.w3.org/TR/prov-aq/
-2) https://www.rd-alliance.org/groups/provenance-patterns-wg 
-3) http://wiki.esipfed.org/index.php/Semantic_Technologies 
+Once set up a simple
 
-
-#### Notes
-Provisium is only just starting.  Leveraging off work done in the Open Core Data project an initial implementation of the 
-basic [PROV-AQ pingback](https://www.w3.org/TR/2013/NOTE-prov-aq-20130430/#provenance-pingback) approach has been implemented.  
-
-An example of this looks when accessing a resource is shown below with the link elments in the HEAD.
-
-```bash
-Fils:dataInit dfils$ curl -s -D - http://127.0.0.1:9900/doc/dataset/bcd15975-680c-47db-a062-ac0bb6e66816 -o /dev/null
-
-HTTP/1.1 200 OK
-Link: <http://127.0.0.1:9900/doc/dataset/bcd15975-680c-47db-a062-ac0bb6e66816/provenance>; rel="http://www.w3.org/ns/prov#has_provenance"
-Link: <http://127.0.0.1:9900/doc/dataset/bcd15975-680c-47db-a062-ac0bb6e66816/pingback>; rel="http://www.w3.org/ns/prov#pingbck"
-
-Date: Fri, 27 Oct 2017 17:58:49 GMT
-Content-Type: text/html; charset=utf-8
-Transfer-Encoding: chunked
+```
+go run cmd/provisium/main.go 
 ```
 
-#### Issues
+will get you started.  I need to get some more details here though.
+This is rather sketch on how to get started.  
 
-##### hasProv 
-We can have many ``` hasProv ``` header items.  The question is should we link to non-origin prov traces with this?  It would 
-seem to imply a certain level of vetting that is not there.
+### Dependency: Jena/Fuseki (Triplestore)
+An instance of Jena Fuseki in Docker that can be used for Provisium.
+Note any SPARQL 1.1 (including update) compliant triples store should 
+work.
 
-##### query service
-It's likely a site would not have both a hasProv and query service.  For this test we will.  It should be noted that the URI of
-a prov record can then not contain # or & or ? as this would effect the structure below.  So, no prov record can be part of a 
-RESTful API with query parameters so defined.  
+* https://cloud.docker.com/u/fcore/repository/docker/fcore/jena
+* https://www.w3.org/TR/sparql11-update/
+* https://www.w3.org/TR/sparql11-protocol/
 
-from the docs
+### Dependency: Minio/S3 (Objectstore)
+An instance of Minio to supply S3 API compliant object store.  
+Note any S3 compliant system such as OpenStack Swift or even 
+AWS S3 itself will work.
+
+* https://hub.docker.com/r/minio/minio
+* https://wiki.openstack.org/wiki/Swift
+* https://aws.amazon.com/s3/
+
+## Notes
+
+### Points
+
+* All submissions come in and get put in an object store (minio)
+with basic metadata about them (requester info) and the package
+* RDF packages are validated prior to archiving.  Once in the object
+store, they move into the graph (Jena)
+* Non-RDF package are validated prior to archiving.  These are likely
+just URL lists as defined by the PROV-AQ spec.  
+* Non-RDF input is also stored in a separate named graph with sufficient triples
+to allow query across the default graph to work for both types of
+submissions.
+
+### Known Issues
+
+
 ```
-A server should not offer a template containing {+uri} or other non-simple variable expansion options [URI-template] unless all 
-valid target-URIs for which it can provide provenance do not contain problematic characters like '#' or '&'.
+Request "hosting" a prov record  (require RDF for this one) (ttl, nt, json-ld)
+Load to graph with a unique QUAD (what if it comes with quads?)
+Don't allow quads  :)   screw your graph!  (can't allow JSON-LD then...)
+
+
+Section 2 Access Section and 3  Locating Prov records
+direct access with 303 redirection
+In this case doc/id is really a page about the hosted PROVURI
+it could give examples of link or query header or RDF graph
+also the pingback ID
+
+Section 4  query service  (direct and SPARQL)
+NOTE this needs a ?q= or more and we need to support SPARQL too
+
+Section 5 pingback (URI list, or has query service or RDF)
+Due to the nature of pingback we can simply hold the POST in an object store.
+If we did accept RDF, we could place that in a graph, but it would be incomplete and care
+would need to be taken to include the other info.   That pingback bundle could be
+converted to RDF but we need to ensure a singable or deterministic serialization
+text/uri-list (which is doable)
+
+Though not part of the Note, a GET service can be called to present past pingbacks
+Potentially, this might be restricted to the authors of a resource, though here no
+authentication or authorization is imposed.  Simple OpenID for ID with some auth policy
+could be built in.
 ```
-
-query service example
-```- Link: <service-URI>;
-  rel="http://www.w3.org/ns/prov#has_query_service";
-  anchor="target-URI"
-```
-
-
-##### hasAnchor
-The  link element (#has_anchor) specifies an identifier for the document that may be used within the provenance record when referring to the document.
-This is preferably the PID of the resource.
-
-examples for has_query_service and has_anchor
-```
-<html xmlns="http://www.w3.org/1999/xhtml">
-     <head>
-        <link rel="http://www.w3.org/ns/prov#has_query_service" href="service-URI">
-        <link rel="http://www.w3.org/ns/prov#has_anchor" href="target-URI">
-        <title>Welcome to example.com</title>
-     </head>
-     <body>
-       <!-- HTML content here... -->
-     </body>
-  </html>
-```
-
-The query service points to a dereferenced query description assumed options include
-*  opensearch description document
-*  swagger description document
-*  schema.org JSON-LD with provides service  (explore this one)
-
-
-#### Questions
-
-* should I content negotiate as RDF (JSON-LD) and put in this namespace..
-* extend the JSON-LD to include the various prov namespace hashed URI terms
-* make a security card on provohash (and provisium) to talk about the security done and NOT done
- (limits, RDF check, etc) and not done (auth, same-origin, etc)
-
-
-RDF example
-```
-@prefix prov: <http://www.w3.org/ns/prov#>.
-
-<> dcterms:title        "Welcome to example.com" ;
-   prov:has_anchor       <http://example.com/data/resource.rdf> ;
-   prov:has_provenance   <http://example.com/provenance/resource.rdf> ;
-   prov:has_query_service <http://example.com/provenance-query-service/> .
-
-   # (More RDF data ...)
-```
-
-
-The direct HTTP query service may return provenance in any available format. For interoperable provenance publication, 
-use of PROV represented in any of its specified formats is recommended. Where alternative formats are available, selection 
-may be made by content negotiation, using Accept: header fields in the HTTP request. Services must identify the Content-Type of the provenance returned.
-
-
-

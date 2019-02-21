@@ -1,9 +1,0 @@
-{
-	"WebStorageDir": "/Users/narock/Desktop/tmp/",
-	"Port": "6789",
-	"URL": "http://localhost/",
-	"LogFile": "./logs/serviceslog.txt",
-	"ApiKeys": "1234",
-	"GraphUriBase": "http://provisium.io/prov/",
-	"KvStoreAPI": "./dataVolume/kvStores/api.db"
-}
