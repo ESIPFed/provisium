@@ -5,22 +5,17 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
+	"github.com/knakk/rdf"
 	"github.com/knakk/sparql"
 	"lab.esipfed.org/provisium/internal/utils"
 )
 
-const queries = `
+const sq = `
 # Comments are ignored, except those tagging a query.
-
-# tag: test
-prefix schema: <http://schema.org/>
-prefix bds: <http://www.bigdata.com/rdf/search#>
-select *
-from <http://provisium.io/graph/id/bhm5hnqu6s70r2q7v71g>
-where {
-   ?s ?p ?o 
-}
+# tag: byid
+CONSTRUCT { ?s ?p ?o } WHERE { GRAPH <http://provisium.io/prov/id/{{.}}> { ?s ?p ?o } . }
 `
 
 // SPO is a struct to hold boolean check on a resource
@@ -39,46 +34,45 @@ type SPO struct {
 
 // Search looks for things..  happy?
 func Search(w http.ResponseWriter, r *http.Request) {
-	log.Println(r.Method)
-	log.Println(r.URL.Path)
-	log.Println(r.Header)
-
 	keys, ok := r.URL.Query()["s"]
 	if !ok || len(keys[0]) < 1 {
 		log.Println("Url Param 's' is missing")
-		// return we need params
 	}
 
 	key := keys[0] // Query()["key"] will return an array, only want 1
 	log.Println("Url Param 's' is: " + string(key))
 
+	//Content-Type: application/ld+json; charset=utf-8; profile="http://www.w3.org/ns/json-ld#expanded"
+	w.Header().Add("Content-Type", "application/n-triples; charset=utf-8")
+	jld := idSearch(string(key))
+	fmt.Fprintf(w, "%s", jld)
+}
+
+func idSearch(xid string) string {
 	repo, err := utils.LDNDBConn()
 	if err != nil {
 		log.Printf("%s\n", err)
 	}
 
-	f := bytes.NewBufferString(queries)
+	f := bytes.NewBufferString(sq)
 	bank := sparql.LoadBank(f)
 
-	q, err := bank.Prepare("test", r)
+	q, err := bank.Prepare("byid", xid)
 	if err != nil {
 		log.Printf("%s\n", err)
 	}
 
 	log.Println(q)
 
-	res, err := repo.Query(q)
+	res, err := repo.Construct(q)
 	if err != nil {
 		log.Printf("%s\n", err)
 	}
 
-	bindings := res.Results.Bindings // map[string][]rdf.Term
-	check := bindings[0]["s"].Value
+	var b strings.Builder
+	for i := range res {
+		fmt.Fprintf(&b, "%s", res[i].Serialize(rdf.NTriples))
+	}
 
-	fmt.Println(check)
-
-	//Content-Type: application/ld+json; charset=utf-8; profile="http://www.w3.org/ns/json-ld#expanded"
-	w.Header().Add("Content-Type", "application/ld+json; charset=utf-8; profile=\"http://www.w3.org/ns/json-ld#expanded\"")
-	jld := "search the data"
-	fmt.Fprintf(w, "%s", jld)
+	return b.String()
 }

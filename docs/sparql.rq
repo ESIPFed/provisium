@@ -1,0 +1,11 @@
+CONSTRUCT { ?s ?p ?o } WHERE { GRAPH <http://provisium.io/prov/id/bhngr0qu6s77utfk2vqg> { ?s ?p ?o } . }
+CONSTRUCT { ?s ?p ?o } WHERE { GRAPH <http://provisium.io/prov/id/bhngku2u6s75gkoevge0> { ?s ?p ?o } . } 
+
+
+prefix schema: <http://schema.org/>
+prefix bds: <http://www.bigdata.com/rdf/search#>
+select *
+from <http://provisium.io/prov/id/bhngr0qu6s77utfk2vqg>
+where {
+   ?s ?p ?o 
+}

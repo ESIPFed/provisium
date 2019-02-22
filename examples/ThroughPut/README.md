@@ -1,4 +1,4 @@
-# Provisum ala THROUGHPUT
+# Provisium ala THROUGHPUT
 
 ## About
 

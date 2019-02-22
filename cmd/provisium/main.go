@@ -22,11 +22,13 @@ var sslVal bool
 func init() {
 	akey := os.Getenv("MINIO_ACCESS_KEY")
 	skey := os.Getenv("MINIO_SECRET_KEY")
+	mhost := os.Getenv("MINIO_HOST")
+	mport := os.Getenv("MINIO_PORT")
 
 	utils.SPARQLurl = os.Getenv("PROVISIUM_SPARQL")
 
-	flag.StringVar(&minioVal, "address", "localhost", "FQDN for server")
-	flag.StringVar(&portVal, "port", "9000", "Port for minio server, default 9000")
+	flag.StringVar(&minioVal, "address", mhost, "FQDN for server")
+	flag.StringVar(&portVal, "port", mport, "Port for minio server, default 9000")
 	flag.StringVar(&accessVal, "access", akey, "Access Key ID")
 	flag.StringVar(&secretVal, "secret", skey, "Secret access key")
 	flag.StringVar(&bucketVal, "bucket", "provisium", "The configuration bucket")
@@ -47,7 +49,7 @@ func main() {
 	router.HandleFunc("/prov/doc", prov.HostProvURI).Methods("POST")
 	router.HandleFunc("/prov/id/{id}", prov.ID).Methods("GET")
 	router.HandleFunc("/prov/doc/{id}", prov.Doc).Methods("GET")
-	router.HandleFunc("/prov/id/{id}/search", search.Search).Methods("GET")
+	router.HandleFunc("/prov/search", search.Search).Methods("GET")
 	router.Handle("/prov/id/{id}/pingback", minioHandler(minioClient, pingback.PostPing)).Methods("POST")
 	router.Handle("/prov/id/{id}/pingback", minioHandler(minioClient, pingback.GetPings)).Methods("GET")
 	router.Handle("/prov/id/{id}/pingback/{hash}", minioHandler(minioClient, pingback.GetPingID)).Methods("GET")

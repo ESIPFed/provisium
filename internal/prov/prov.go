@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"strings"
 
 	"github.com/rs/xid"
 	"lab.esipfed.org/provisium/internal/utils"
@@ -56,32 +55,6 @@ func HostProvURI(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "")
 }
 
-// ID performs a simple content redirection to doc for all cases
-// other than content types for RDF, for that it returns the content
-func ID(w http.ResponseWriter, r *http.Request) {
-	// TODO   if RDF..   return the rdf
-	// if anything else redirect to web view
-	log.Println(r.Method)
-	log.Println(r.URL.Path)
-	log.Println(r.Header)
-	log.Println(r.Header["Content-Type"])
-
-	// TODO  need to  see if this is even a valid
-	// URL to request on.
-
-	p := r.URL.Path
-	if utils.Contains(r.Header["Content-Type"], "application/ld+json") {
-		w.Header().Add("Content-Type", "application/ld+json; charset=utf-8; profile=\"http://www.w3.org/ns/json-ld#expanded\"")
-		jld := TestJSON()
-		fmt.Fprintf(w, "%s", jld)
-	} else {
-		w.Header().Add("Content-Type", "text/plain; charset=utf-8; profile=\"http://www.w3.org/ns/json-ld#expanded\"")
-		p = strings.Replace(p, "/id/", "/doc/", -1)
-		fmt.Printf("http://" + r.Host + p)
-		http.Redirect(w, r, "http://"+r.Host+p, http.StatusMovedPermanently)
-	}
-}
-
 // TestJSON is just a place holder function for some JSON[-ld]
 func TestJSON() string {
 	j := `{
@@ -97,6 +70,5 @@ func TestJSON() string {
 	"ical:location": "New Orleans Arena, New Orleans, Louisiana, USA",
 	"ical:dtstart": "2011-04-09T20:00:00Z"
   }`
-
 	return j
 }
