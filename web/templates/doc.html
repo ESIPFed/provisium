@@ -15,11 +15,82 @@
 	<p>
 		Provide some examples here of how someone can include a given record in their
 		page based on the PROV-AQ Note
+		ref: <a href="https://www.w3.org/TR/prov-aq/">https://www.w3.org/TR/prov-aq/</a>
 	</p>
 
 	<pre>
 		{{.}}
 	</pre>
+
+
+
+	<h3>Link via has_provenance</h3>
+
+	<pre>
+    Link: <provenance-URI>;
+    rel="http://www.w3.org/ns/prov#has_provenance";
+    anchor="target-URI"
+    </pre>
+
+	<h3>Link via has_query_service</h3>
+
+	<pre>
+    Link: <service-URI>;
+    rel="http://www.w3.org/ns/prov#has_query_service";
+    anchor="target-URI"
+    </pre>
+
+
+<pre>
+&lt;html&gt;
+&lt;head&gt;
+	&lt;link rel=&quot;http://www.w3.org/ns/prov#has_provenance&quot; href=&quot;provenance-URI&quot;&gt;
+	&lt;link rel=&quot;http://www.w3.org/ns/prov#has_anchor&quot; href=&quot;target-URI&quot;&gt;
+	&lt;title&gt;Welcome to example.com&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;!-- HTML content here... --&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+
+
+<pre>
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+&lt;head&gt;
+	&lt;link rel=&quot;http://www.w3.org/ns/prov#has_query_service&quot; href=&quot;service-URI&quot;&gt;
+	&lt;link rel=&quot;http://www.w3.org/ns/prov#has_anchor&quot; href=&quot;target-URI&quot;&gt;
+	&lt;title&gt;Welcome to example.com&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+	&lt;!-- HTML content here... --&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+
+	
+  
+
+<pre>
+    @prefix prov: &lt;http://www.w3.org/ns/prov#&gt;.
+
+    &lt;&gt; dcterms:title        &quot;Welcome to example.com&quot; ;
+           prov:has_anchor       &lt;http://example.com/data/resource.rdf&gt; ;
+           prov:has_provenance   &lt;http://example.com/provenance/resource.rdf&gt; ;
+           prov:has_query_service &lt;http://example.com/provenance-query-service/&gt; .
+
+           # (More RDF data ...)
+   
+
+
+	
+    Link: &lt;http://acme.example.org/super-widget123/pingback&gt;; 
+             rel=&quot;http://www.w3.org/ns/prov#pingback&quot;
+    
+</pre>   
+
 
 </html>
 {{end}}

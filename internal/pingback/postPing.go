@@ -36,8 +36,8 @@ func PostPing(minioClient *minio.Client, w http.ResponseWriter, r *http.Request)
 
 	// objectName := fmt.Sprintf("%s/%s.jsonld", up.Path, bss)
 	objectName := fmt.Sprintf("%s/%s", pa[len(pa)-2], bss) // note getting the SID at index -2 from the URL
-	contentType := "application/ld+json"
-	b := bytes.NewBufferString("body") // TODO need a string buffer from []byte
+	contentType := "application/ld+json"                   // TODO   this is WRONG..  get from the request!!!!
+	b := bytes.NewBufferString(string(body))               // TODO need a string buffer from []byte
 
 	usermeta := make(map[string]string) // what do I want to know?
 	usermeta["url"] = r.Host
@@ -55,7 +55,7 @@ func PostPing(minioClient *minio.Client, w http.ResponseWriter, r *http.Request)
 	fmt.Println(string(body))
 
 	//Content-Type: application/ld+json; charset=utf-8; profile="http://www.w3.org/ns/json-ld#expanded"
-	w.Header().Add("Content-Type", "application/ld+json; charset=utf-8; profile=\"http://www.w3.org/ns/json-ld#expanded\"")
-	jld := "Some function to do things"
-	fmt.Fprintf(w, "%s", jld)
+	w.Header().Add("Content-Type", "text/plain; charset=utf-8; ")
+	msg := fmt.Sprintf("http://localhost:6789/prov/id/%s/pingback/%s", pa[len(pa)-2], bss)
+	fmt.Fprintf(w, "%s", msg)
 }
