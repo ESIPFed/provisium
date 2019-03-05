@@ -7,12 +7,12 @@ linux:
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 env go build -o $(BINARY)
 
 docker:
-	docker build --tag="nsfearthcube/thprov:$(VERSION)"  --file=./build/Dockerfile . ; \
-	docker tag nsfearthcube/thprov:$(VERSION) earthcube/thprov:latest
+	docker build --tag="esip/$(BINARY):$(VERSION)"  --file=./build/Dockerfile . ; \
+	docker tag esip/$(BINARY):$(VERSION) esip/thprov:latest
 
 removeimage:
-	docker rmi --force nsfearthcube/thprov:$(VERSION)
-	docker rmi --force nsfearthcube/thprov:latest
+	docker rmi --force esip/$(BINARY):$(VERSION)
+	docker rmi --force esip/$(BINARY):latest
 
 publish: docker
-	docker push nsfearthcube/thprov:$(DOCKERVER)
+	docker push esip/$(BINARY):$(VERSION)

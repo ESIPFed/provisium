@@ -26,6 +26,8 @@ func PostPing(minioClient *minio.Client, w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	// TODO move tihs to its own function
+
 	h := sha1.New()
 	h.Write([]byte(body))
 	bs := h.Sum(nil)
@@ -52,7 +54,8 @@ func PostPing(minioClient *minio.Client, w http.ResponseWriter, r *http.Request)
 	}
 	log.Printf("Uploaded Bucket:%s File:%s Size %d\n", bucketName, objectName, n)
 
-	fmt.Println(string(body))
+	// TODO at this point call pingtograph and get back the triples (should be pingtotriples)
+	// TODO then call jena loader to insert the triples...
 
 	//Content-Type: application/ld+json; charset=utf-8; profile="http://www.w3.org/ns/json-ld#expanded"
 	w.Header().Add("Content-Type", "text/plain; charset=utf-8; ")
